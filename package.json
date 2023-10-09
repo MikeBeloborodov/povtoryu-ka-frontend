@@ -1,0 +1,11 @@
+{
+  "name": "povtoryu-ka-frontend",
+  "version": "1.0.0",
+  "description": "Frontend part of my project to save and remember words, grammar and languages in general.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "https://github.com/MikeBeloborodov",
+  "license": "ISC"
+}
