@@ -1,0 +1,31 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  block-size: 100vh;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  max-inline-size: 1200px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+blockquote,
+ul,
+ol,
+li,
+a,
+p {
+  padding: 0;
+  margin: 0;
+}
