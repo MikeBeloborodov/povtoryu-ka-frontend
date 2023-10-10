@@ -2,12 +2,13 @@
 
 .menu {
   margin: 0;
-  background-color: $white-background;
+  background-color: $menu-background-color;
   padding: 40px 30px;
-  border-radius: 30px;
+  border-radius: $general-border-radius;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  box-shadow: $general-box-shadow;
 }
 
 .menu__item-link {
@@ -19,7 +20,8 @@
   border-radius: 17px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  justify-content: space-between;
+  block-size: 100px;
 }
 
 .new_cards {

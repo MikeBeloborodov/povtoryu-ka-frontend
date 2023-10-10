@@ -1,5 +1,7 @@
 // colors
 $body-background-color: #f5f5fb;
+$menu-background-color: #fefefe;
+$card-background-color: #fefefe;
 $heading-color: #111026;
 $heading-light-color: #ffffff;
 $paragraph-color: #131336;
@@ -14,6 +16,7 @@ $weak-cards-amount-color: #6b8af0;
 $theme-cards-bg-color: #a4a6db;
 $theme-cards-amount-color: #9193c7;
 $footer-text-color: #a4a6db;
+$card-hover-background-color: #e7e8ff;
 
 // colorscheeme
 $normal-blue: #5e81f4;
@@ -25,3 +28,9 @@ $orange: #ff808b;
 $lighter-orange: #ff919b;
 $super-light-orange: #f7e5e9;
 $white-background: #fefefe;
+
+// border radius
+$general-border-radius: 30px;
+
+// box shadow
+$general-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.2);

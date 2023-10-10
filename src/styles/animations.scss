@@ -1,3 +1,5 @@
+@import 'variables';
+
 .menu__item {
   transition: transform 0.3s;
   transition-timing-function: ease;
@@ -5,4 +7,18 @@
 
 .menu__item:hover {
   transform: scale(1.02);
+}
+
+.card:has(.card__front_active) {
+  transition:
+    min-block-size 0.3s,
+    inline-size 0.3s,
+    background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.card:has(.card__front_active):hover {
+  min-block-size: 510px;
+  inline-size: 103%;
+  background-color: $card-hover-background-color;
 }

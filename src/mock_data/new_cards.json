@@ -1,0 +1,39 @@
+[
+  {
+    "id": 1,
+    "teacher_id": 1,
+    "student_id": 1,
+    "new_card": true,
+    "category": "IT English",
+    "theme": "Interview",
+    "word": "skill",
+    "part_of_speech": "noun",
+    "part_of_speech_ru": "существительное",
+    "definition": "The ability to do something that comes from training, experience, or practice",
+    "in_context": [
+      "Cooking is a useful {it}skill{/it}.",
+      "Poker is a game of luck and {it}skill{/it}.",
+      "He has excellent social {it}skills{/it}.",
+      "The work is difficult and requires a lot of {it}skill{/it}."
+    ],
+    "translation": ["умение", "мастерство", "способность", "талант"],
+    "images": [
+      {
+        "thumb": "https://serpapi.com/searches/65256ff6f8f5f7d5f6d4f030/images/5f7aa4266aff0a2f50bd527231855ab0c427f1a89d4dc4f2c5d19904c83176f3.jpeg",
+        "original": "https://images.ctfassets.net/pdf29us7flmy/4I1CyulJ49qdVCN7wJlSRT/097668585937941e074dfb6e18d5cdc4/personal-skills-and-professional-skills-02.png"
+      },
+      {
+        "thumb": "https://serpapi.com/searches/65256ff6f8f5f7d5f6d4f030/images/5f7aa4266aff0a2f8ed56e0c49ec9f813fc19b794a23133baf275ccf3499852b.jpeg",
+        "original": "https://ugc.futurelearn.com/uploads/images/9b/e5/9be5958a-437e-4846-a5be-6978cc8f362b.png"
+      },
+      {
+        "thumb": "https://serpapi.com/searches/65256ff6f8f5f7d5f6d4f030/images/5f7aa4266aff0a2f57a9fb14c18423392770f15dba9248f787b71d79fbc4a3c1.png",
+        "original": "https://i0.wp.com/bestpractice.biz/wp-content/uploads/2021/02/Maddie-banner-skill-set.png?fit=1200%2C628&ssl=1"
+      },
+      {
+        "thumb": "https://serpapi.com/searches/65256ff6f8f5f7d5f6d4f030/images/5f7aa4266aff0a2f5d3717fc203d1533e6a0ffb280cdb608d618e9fed57d34bf.png",
+        "original": "https://www.mckinsey.com/~/media/mckinsey/mckinsey%20quarterly/the%20five%20fifty/soft-skills-1536x1536.png"
+      }
+    ]
+  }
+]

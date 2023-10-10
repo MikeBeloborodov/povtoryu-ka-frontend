@@ -100,6 +100,13 @@ function videos() {
     .pipe(browserSync.reload({ stream: true }));
 }
 
+function mock_data() {
+  return gulp
+    .src('src/mock_data/**/*.*')
+    .pipe(gulp.dest('dist/mock_data'))
+    .pipe(browserSync.reload({ stream: true }));
+}
+
 function clean() {
   return del('dist');
 }
@@ -116,6 +123,7 @@ function watchFiles() {
   gulp.watch(['src/fonts/**/*.{ttf,woff,woff2}'], fonts);
   gulp.watch(['src/videos/**/*.{avi,mp4,webm}'], videos);
   gulp.watch(['src/scripts/**/*.ts'], type_script);
+  gulp.watch(['src/mock_data/**/*.*'], mock_data);
 }
 
 function serve() {
@@ -129,7 +137,17 @@ function serve() {
 // add css if needed
 const build = gulp.series(
   clean,
-  gulp.parallel(html, scss, images, favicons, svg, fonts, videos, type_script)
+  gulp.parallel(
+    html,
+    scss,
+    images,
+    favicons,
+    svg,
+    fonts,
+    videos,
+    type_script,
+    mock_data
+  )
 );
 const watchapp = gulp.parallel(build, watchFiles, serve);
 
@@ -142,6 +160,7 @@ exports.svg = svg;
 exports.fonts = fonts;
 exports.videos = videos;
 exports.type_script = type_script;
+exports.mock_data = mock_data;
 exports.clean = clean;
 exports.build = build;
 exports.watchFiles = watchFiles;

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Повторю-ка - Новые карточи</title>
+    <link rel="stylesheet" href="../bundle.css" />
+    <link rel="icon" href="../favicons/favicon.ico" sizes="any" />
+    <link rel="icon" href="../favicons/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="../favicons/mobile-icon.png" />
+  </head>
+  <body class="body">
+    <main>
+      <section class="trainer"></section>
+    </main>
+    <footer class="footer">&copy; 2023 MikeBeloborodov</footer>
+    <script src="../scripts/index.js"></script>
+    <script src="../scripts/new_cards.js" defer></script>
+    <script src="../scripts/card.js" defer></script>
+
+    <!-- Card template -->
+    <template id="card">
+      <article class="card">
+        <section class="card__front card__front_active">
+          <h2 class="card__front-title visually-hidden">Перед карточки</h2>
+          <button class="card__front-button">
+            <span class="card__front-word"></span>
+          </button>
+        </section>
+        <section class="card__back">
+          <h2 class="card__back-title visually-hidden">Оборот карточки</h2>
+          <section class="card__back-sentences">
+            <h3 class="card__back-sentences-title">Примеры предложений:</h3>
+            <ul class="card__back-sentences-container">
+              <li class="card__back-sentence-item">
+                <p class="card__back-sentence"></p>
+              </li>
+            </ul>
+            <button class="card__back-next-sentence-btn next-btn">Ещё</button>
+          </section>
+          <section class="card__back-images">
+            <h3 class="card__back-images-title">Картинки:</h3>
+            <ul class="card__back-images-container">
+              <li class="card__back-image-item">
+                <img src="" alt="" class="card__back-image" />
+              </li>
+            </ul>
+            <button class="card__back-next-image-btn next-btn">Ещё</button>
+          </section>
+          <section class="card__back-translations">
+            <h3 class="card__back-translations-title">Перевод:</h3>
+            <ul class="card__back-translations-container">
+              <li class="card__back-translations-item">
+                <p class="card__back-translation"></p>
+              </li>
+            </ul>
+            <button class="card__back-next-translation next-btn">Ещё</button>
+          </section>
+          <section class="card__back-controls">
+            <button
+              class="card__back-controls-remember card-control-btn"
+              id="remember-btn"
+            >
+              Помню
+            </button>
+            <button
+              class="card__back-controls-forgot card-control-btn"
+              id="forgot-btn"
+            >
+              Не помню
+            </button>
+          </section>
+        </section>
+      </article>
+    </template>
+  </body>
+</html>
