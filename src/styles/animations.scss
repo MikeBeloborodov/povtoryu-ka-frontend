@@ -1,0 +1,8 @@
+.menu__item {
+  transition: transform 0.3s;
+  transition-timing-function: ease;
+}
+
+.menu__item:hover {
+  transform: scale(1.02);
+}

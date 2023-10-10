@@ -1,3 +1,35 @@
+@import 'variables';
+
 .body {
   font-family: Raleway, sans-serif;
+  background-color: $body-background-color;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  block-size: 100vh;
+  justify-content: space-between;
+}
+
+.header {
+  padding: 30px 0 20px 20px;
+  inline-size: fit-content;
+}
+
+.header__title {
+  font-size: 25px;
+  inline-size: fit-content;
+}
+
+.header__link {
+  inline-size: fit-content;
+}
+
+.content {
+}
+
+.footer {
+  text-align: center;
+  color: $footer-text-color;
+  margin: 20px 0 20px 0;
 }

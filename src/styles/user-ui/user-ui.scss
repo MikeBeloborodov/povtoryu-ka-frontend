@@ -1,0 +1,74 @@
+@import '../variables';
+
+.menu {
+  margin: 0;
+  background-color: $white-background;
+  padding: 40px 30px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.menu__item-link {
+  cursor: pointer;
+}
+
+.menu__card {
+  padding: 10px 20px;
+  border-radius: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.new_cards {
+  background-color: $new-cards-bg-color;
+}
+
+.menu__card-title {
+  color: $heading-light-color;
+}
+
+.menu__card-amount {
+  color: $paragraph-white-color;
+  inline-size: fit-content;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.new_cards .menu__card-amount {
+  background-color: $new-cards-amount-color;
+}
+
+.card_amount {
+  font-weight: bold;
+}
+
+.weak_cards {
+  background-color: $weak-cards-bg-color;
+}
+
+.weak_cards .menu__card-amount {
+  background-color: $weak-cards-amount-color;
+}
+
+.all_cards {
+  background-color: $all-cards-bg-color;
+}
+
+.all_cards .menu__card-amount {
+  background-color: $all-cards-amount-color;
+}
+
+.theme_cards {
+  background-color: $theme-cards-bg-color;
+}
+
+.theme_cards .menu__card-amount {
+  background-color: $theme-cards-amount-color;
+}
+
+.menu__card-category {
+  color: $paragraph-white-color;
+}

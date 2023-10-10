@@ -74,7 +74,15 @@ function type_script() {
   return tsProject
     .src()
     .pipe(tsProject())
-    .js.pipe(gulp.dest('dist/'))
+    .js.pipe(
+      jsMinify({
+        ext: {
+          min: '.js',
+        },
+        noSource: true,
+      })
+    )
+    .pipe(gulp.dest('dist/'))
     .pipe(browserSync.reload({ stream: true }));
 }
 
