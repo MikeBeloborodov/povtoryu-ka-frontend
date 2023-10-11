@@ -10,15 +10,45 @@
 }
 
 .card:has(.card__front_active) {
-  transition:
-    min-block-size 0.3s,
-    inline-size 0.3s,
-    background-color 0.3s;
+  transition: background-color 0.3s;
   transition-timing-function: ease;
 }
 
 .card:has(.card__front_active):hover {
-  min-block-size: 510px;
-  inline-size: 103%;
-  background-color: $card-hover-background-color;
+  background-color: #f2f2f2;
+}
+
+.card__back-sentence-item {
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  transition-timing-function: ease;
+}
+
+.card__back-image-item {
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  transition-timing-function: ease;
+}
+
+.card__back-translations-item {
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  transition-timing-function: ease;
+}
+
+.card__back {
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  transition-timing-function: ease;
+}
+
+.card__front {
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  transition-timing-function: ease;
 }

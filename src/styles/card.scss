@@ -6,6 +6,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px 0;
 }
 
 .card {
@@ -14,10 +15,17 @@
   inline-size: 100%;
   min-block-size: 500px;
   box-shadow: $general-box-shadow;
+  padding: 30px 20px;
+  color: $paragraph-color;
+  position: relative;
 }
 
 .card__front {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  z-index: -1;
+  visibility: hidden;
 }
 
 .card__front_active {
@@ -27,12 +35,15 @@
   align-items: center;
   block-size: 100%;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  visibility: initial;
 }
 
 .card__front-button {
   background-color: inherit;
   border: none;
-  font-family: inherit;
   font-size: 40px;
 }
 
@@ -40,23 +51,59 @@
 }
 
 .card__back {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  z-index: -1;
+  visibility: hidden;
 }
 
 .card__back_active {
-  display: initial;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  visibility: initial;
 }
 
 .card__back-sentences {
 }
 
+.word-in-sentence {
+  font-weight: bold;
+  display: inline-block;
+  padding: 0 4px;
+}
+
 .card__back-sentences-title {
 }
 
+.card__title {
+  margin: 0 0 10px 0;
+  color: $paragraph-light-color;
+  font-size: 16px;
+}
+
 .card__back-sentences-container {
+  position: relative;
 }
 
 .card__back-sentence-item {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  z-index: -1;
+  visibility: hidden;
+}
+
+.card__back-sentence-item_active {
+  display: initial;
+  position: relative;
+  visibility: initial;
+  opacity: 1;
+  z-index: 1;
 }
 
 .class__back-sentence {
@@ -66,6 +113,14 @@
 }
 
 .next-btn {
+  cursor: pointer;
+  border: none;
+  background-color: $next-btn-background-color;
+  border-radius: 5px;
+  color: $paragraph-white-color;
+  font-size: 30px;
+  line-height: 0.6;
+  margin: 10px 0 0 0;
 }
 
 .card__back-images {
@@ -75,12 +130,35 @@
 }
 
 .card__back-images-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
 }
 
 .card__back-image-item {
+  inline-size: 100%;
+  block-size: 150px;
+  border-radius: 20px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+}
+
+.card__back-image-item_active {
+  display: initial;
+  opacity: 1;
+  visibility: initial;
+  z-index: 1;
+  position: relative;
 }
 
 .card__back-image {
+  object-fit: cover;
+  object-position: center;
 }
 
 .card__back-next-image-btn {
@@ -96,6 +174,19 @@
 }
 
 .card__back-translations-item {
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+}
+
+.card__back-translations-item_active {
+  display: initial;
+  opacity: 1;
+  visibility: initial;
+  z-index: 1;
+  position: relative;
 }
 
 .card__back-translation {
@@ -105,13 +196,29 @@
 }
 
 .card__back-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  gap: 30px;
 }
 
 .card-control-btn {
+  cursor: pointer;
+  display: block;
+  padding: 10px 0;
+  border: none;
+  font-size: 16px;
+  border-radius: 10px;
+  color: $paragraph-white-color;
+  font-weight: bold;
+  min-inline-size: 100px;
 }
 
 .card__back-controls-remember {
+  background-color: $remember-btn-background-color;
 }
 
 .card__back-controls-forgot {
+  background-color: $forgot-btn-background-color;
 }

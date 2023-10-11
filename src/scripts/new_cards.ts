@@ -26,6 +26,167 @@ interface ImageObject {
 }
 
 // functions
+const prepareWord = (cardElement: HTMLElement, cardData: CardData) => {
+  const cardWord = cardElement.querySelector('.card__front-word');
+  cardWord ? (cardWord.textContent = cardData.word) : null;
+};
+
+const prepareDefinition = (cardElement: HTMLElement, cardData: CardData) => {
+  const definitionContainer = cardElement.querySelector(
+    '.card__back-definition'
+  );
+  if (definitionContainer) {
+    const definition = definitionContainer.querySelector(
+      '.card__back-definition-text'
+    );
+    definition ? (definition.textContent = cardData.definition) : null;
+  }
+};
+
+const prepareSentences = (cardElement: HTMLElement, cardData: CardData) => {
+  const sentencesContainer = cardElement.querySelector(
+    '.card__back-sentences-container'
+  );
+  cardData.in_context.forEach((sentence_data, index) => {
+    const sentenceListItem = cardElement
+      .querySelector('.card__back-sentence-item')
+      ?.cloneNode(true) as HTMLElement;
+    const sentence = sentenceListItem.querySelector('.card__back-sentence');
+    if (sentence) {
+      const frontTag = '{it}';
+      const backTag = '{/it}';
+      const textBeforeFrontTag = sentence_data.slice(
+        0,
+        sentence_data.indexOf(frontTag)
+      );
+      const textAfterBackTag = sentence_data
+        .slice(sentence_data.indexOf(backTag))
+        .replace(backTag, '');
+      const span = document.createElement('span');
+      span.classList.add('word-in-sentence');
+      span.textContent = cardData.word;
+      sentence.innerHTML += textBeforeFrontTag;
+      sentence.append(span);
+      sentence.innerHTML += textAfterBackTag;
+    }
+    if (index === 0 && sentenceListItem) {
+      sentenceListItem.classList.add('card__back-sentence-item_active');
+    }
+    sentencesContainer ? sentencesContainer.append(sentenceListItem) : null;
+  });
+  //remove sentence template
+  const sentenceListItemOriginal = cardElement.querySelector(
+    '.card__back-sentence-item'
+  );
+  sentenceListItemOriginal ? sentenceListItemOriginal.remove() : null;
+};
+
+const prepareImages = (cardElement: HTMLElement, cardData: CardData) => {
+  const imagesContainer = cardElement.querySelector(
+    '.card__back-images-container'
+  );
+  cardData.images.forEach((image_data, index) => {
+    const imageListItem = cardElement
+      ?.querySelector('.card__back-image-item')
+      ?.cloneNode(true) as HTMLElement;
+    const image = imageListItem.querySelector(
+      '.card__back-image'
+    ) as HTMLImageElement;
+    image ? (image.src = image_data.thumb) : null;
+    if (index === 0 && imageListItem) {
+      imageListItem.classList.add('card__back-image-item_active');
+    }
+    imagesContainer ? imagesContainer.append(imageListItem) : null;
+  });
+  // remove image template
+  const imageListItemOriginal = cardElement.querySelector(
+    '.card__back-image-item'
+  );
+  imageListItemOriginal ? imageListItemOriginal.remove() : null;
+};
+
+const prepareTranslations = (cardElement: HTMLElement, cardData: CardData) => {
+  const translationsContainer = cardElement.querySelector(
+    '.card__back-translations-container'
+  );
+  cardData.translation.forEach((translation_data, index) => {
+    const translationListItem = cardElement
+      .querySelector('.card__back-translations-item')
+      ?.cloneNode(true) as HTMLElement;
+    const translation = translationListItem.querySelector(
+      '.card__back-translation'
+    );
+    translation ? (translation.textContent = translation_data) : null;
+    if (index === 0 && translationListItem) {
+      translationListItem.classList.add('card__back-translations-item_active');
+    }
+    translationsContainer
+      ? translationsContainer.append(translationListItem)
+      : null;
+  });
+  // remove translation template
+  const translationListItemOriginal = cardElement.querySelector(
+    '.card__back-translations-item'
+  );
+  translationListItemOriginal ? translationListItemOriginal.remove() : null;
+};
+
+const prepareButtons = (cardElement: HTMLElement) => {
+  // buttons
+  const nextSentenceBtn = cardElement.querySelector(
+    '.card__back-next-sentence-btn'
+  ) as HTMLButtonElement;
+  const nextImageBtn = cardElement.querySelector(
+    '.card__back-next-image-btn'
+  ) as HTMLButtonElement;
+  const nextTranslationBtn = cardElement.querySelector(
+    '.card__back-next-translation-btn'
+  ) as HTMLButtonElement;
+
+  // event listeners
+  nextSentenceBtn?.addEventListener('click', () => {
+    const shownSentences = cardElement.querySelectorAll(
+      '.card__back-sentence-item_active'
+    );
+    const nextSentence = shownSentences[shownSentences.length - 1]
+      .nextSibling as HTMLElement;
+    if (nextSentence) {
+      nextSentence.classList.add('card__back-sentence-item_active');
+      if (!nextSentence.nextSibling) {
+        nextSentenceBtn.style.display = 'none';
+      }
+    }
+  });
+
+  nextImageBtn?.addEventListener('click', () => {
+    const shownImages = cardElement.querySelectorAll(
+      '.card__back-image-item_active'
+    );
+    const nextImage = shownImages[shownImages.length - 1]
+      .nextSibling as HTMLElement;
+    if (nextImage) {
+      nextImage.classList.add('card__back-image-item_active');
+      if (!nextImage.nextSibling) {
+        nextImageBtn.style.display = 'none';
+      }
+    }
+  });
+
+  nextTranslationBtn?.addEventListener('click', () => {
+    const shownTranslation = cardElement.querySelectorAll(
+      '.card__back-translations-item_active'
+    );
+    const nextTranslation = shownTranslation[shownTranslation.length - 1]
+      .nextSibling as HTMLElement;
+    if (nextTranslation) {
+      nextTranslation.classList.add('card__back-translations-item_active');
+      if (!nextTranslation.nextSibling) {
+        nextTranslationBtn.style.display = 'none';
+      }
+    }
+  });
+};
+
 const createCard = (cardData: CardData) => {
   const cardElement = cardTemplate
     ?.querySelector('.card')
@@ -33,70 +194,17 @@ const createCard = (cardData: CardData) => {
 
   if (cardElement) {
     // fill data
-    //
-    // word
-    const cardWord = cardElement.querySelector('.card__front-word');
-    cardWord ? (cardWord.textContent = cardData.word) : null;
+    prepareWord(cardElement, cardData);
 
-    // sentences
-    const sentencesContainer = cardElement.querySelector(
-      '.card__back-sentences-container'
-    );
-    cardData.in_context.forEach((sentence_data) => {
-      const sentenceListItem = cardElement
-        .querySelector('.card__back-sentence-item')
-        ?.cloneNode(true) as HTMLElement;
-      const sentence = sentenceListItem.querySelector('.card__back-sentence');
-      sentence ? (sentence.textContent = sentence_data) : null;
-      sentencesContainer ? sentencesContainer.append(sentenceListItem) : null;
-    });
-    //remove sentence template
-    const sentenceListItemOriginal = cardElement.querySelector(
-      '.card__back-sentence-item'
-    );
-    sentenceListItemOriginal ? sentenceListItemOriginal.remove() : null;
+    prepareDefinition(cardElement, cardData);
 
-    // images
-    const imagesContainer = cardElement.querySelector(
-      '.card__back-images-container'
-    );
-    cardData.images.forEach((image_data) => {
-      const imageListItem = cardElement
-        ?.querySelector('.card__back-image-item')
-        ?.cloneNode(true) as HTMLElement;
-      const image = imageListItem.querySelector(
-        '.card__back-image'
-      ) as HTMLImageElement;
-      image ? (image.src = image_data.thumb) : null;
-      imagesContainer ? imagesContainer.append(imageListItem) : null;
-    });
-    // remove image template
-    const imageListItemOriginal = cardElement.querySelector(
-      '.card__back-image-item'
-    );
-    imageListItemOriginal ? imageListItemOriginal.remove() : null;
+    prepareSentences(cardElement, cardData);
 
-    // translation
-    const translationsContainer = cardElement.querySelector(
-      '.card__back-translations-container'
-    );
-    cardData.translation.forEach((translation_data) => {
-      const translationListItem = cardElement
-        .querySelector('.card__back-translations-item')
-        ?.cloneNode(true) as HTMLElement;
-      const translation = translationListItem.querySelector(
-        '.card__back-translation'
-      );
-      translation ? (translation.textContent = translation_data) : null;
-      translationsContainer
-        ? translationsContainer.append(translationListItem)
-        : null;
-    });
-    // remove translation template
-    const translationListItemOriginal = cardElement.querySelector(
-      '.card__back-translations-item'
-    );
-    translationListItemOriginal ? translationListItemOriginal.remove() : null;
+    prepareImages(cardElement, cardData);
+
+    prepareTranslations(cardElement, cardData);
+
+    prepareButtons(cardElement);
 
     return cardElement;
   }
