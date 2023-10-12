@@ -154,6 +154,7 @@
   visibility: initial;
   z-index: 1;
   position: relative;
+  cursor: pointer;
 }
 
 .card__back-image {
@@ -219,6 +220,14 @@
   background-color: $remember-btn-background-color;
 }
 
+.card__back-controls-remember:hover {
+  background-color: $remember-btn-hover-color;
+}
+
 .card__back-controls-forgot {
   background-color: $forgot-btn-background-color;
+}
+
+.card__back-controls-forgot:hover {
+  background-color: $forgot-btn-hover-color;
 }

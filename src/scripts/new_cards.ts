@@ -81,6 +81,20 @@ const prepareSentences = (cardElement: HTMLElement, cardData: CardData) => {
   sentenceListItemOriginal ? sentenceListItemOriginal.remove() : null;
 };
 
+const createImageModal = (image_data: ImageObject) => {
+  const modal = document.createElement('div');
+  modal.classList.add('image-modal');
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('image-modal__content');
+  const modalImage = document.createElement('img');
+  modalImage.classList.add('image-modal__image');
+  modalImage.src = image_data.original;
+  modalContent.append(modalImage);
+  modal.append(modalContent);
+
+  return modal;
+};
+
 const prepareImages = (cardElement: HTMLElement, cardData: CardData) => {
   const imagesContainer = cardElement.querySelector(
     '.card__back-images-container'
@@ -92,6 +106,12 @@ const prepareImages = (cardElement: HTMLElement, cardData: CardData) => {
     const image = imageListItem.querySelector(
       '.card__back-image'
     ) as HTMLImageElement;
+    imageListItem.addEventListener('click', () => {
+      const modal = createImageModal(image_data);
+      modal.addEventListener('click', () => modal.remove());
+      document.body.append(modal);
+      scroll(0, 0);
+    });
     image ? (image.src = image_data.thumb) : null;
     if (index === 0 && imageListItem) {
       imageListItem.classList.add('card__back-image-item_active');

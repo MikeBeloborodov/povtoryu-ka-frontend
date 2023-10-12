@@ -28,8 +28,13 @@
 .card__back-image-item {
   transition:
     opacity 0.3s,
-    visibility 0.3s;
+    visibility 0.3s,
+    transform 0.3s;
   transition-timing-function: ease;
+}
+
+.card__back-image-item:hover {
+  transform: scale(1.02);
 }
 
 .card__back-translations-item {
@@ -50,5 +55,15 @@
   transition:
     opacity 0.3s,
     visibility 0.3s;
+  transition-timing-function: ease;
+}
+
+.card__back-controls-remember {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.card__back-controls-forgot {
+  transition: background-color 0.3s;
   transition-timing-function: ease;
 }
