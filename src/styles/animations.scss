@@ -67,3 +67,21 @@
   transition: background-color 0.3s;
   transition-timing-function: ease;
 }
+
+.login-btn {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.register-btn {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.login-btn:hover {
+  background-color: $login-btn-hover-color;
+}
+
+.register-btn:hover {
+  background-color: $register-btn-hover-color;
+}

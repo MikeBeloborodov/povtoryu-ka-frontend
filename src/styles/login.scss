@@ -1,0 +1,75 @@
+@import 'variables';
+
+.login__main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login {
+  background-color: $login-background-color;
+  padding: 40px;
+  border-radius: $general-border-radius;
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login__title {
+  font-size: 18px;
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-label {
+  margin: 0 0 10px 0;
+  display: block;
+}
+
+.login__user-name {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid black;
+  inline-size: 100%;
+}
+
+.login__user-password {
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 8px;
+  inline-size: 100%;
+}
+
+.login__btns {
+  display: flex;
+  margin: 20px 0 0 0;
+  gap: 30px;
+  justify-content: center;
+}
+
+.login-btn {
+  background-color: $login-btn-background-color;
+}
+
+.register-btn {
+  background-color: $register-btn-background-color;
+}
+
+.login-form-btn {
+  border: none;
+  font-size: 15px;
+  color: $paragraph-white-color;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  min-inline-size: 90px;
+}
