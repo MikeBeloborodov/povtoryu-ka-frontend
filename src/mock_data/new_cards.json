@@ -1,16 +1,16 @@
 [
   {
     "id": 1,
-    "teacher_id": 1,
-    "student_id": 1,
-    "new_card": true,
+    "teacherId": 1,
+    "studentId": 1,
+    "newCard": true,
     "category": "IT English",
     "theme": "Interview",
     "word": "skill",
-    "part_of_speech": "noun",
-    "part_of_speech_ru": "существительное",
+    "partOfSpeech": "noun",
+    "partOfSpeechRu": "существительное",
     "definition": "The ability to do something that comes from training, experience, or practice",
-    "in_context": [
+    "sentences": [
       "Cooking is a useful {it}skill{/it}.",
       "Poker is a game of luck and {it}skill{/it}.",
       "He has excellent social {it}skills{/it}.",

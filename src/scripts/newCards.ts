@@ -9,21 +9,29 @@ interface CardData {
   definition: string;
   id: number;
   images: ImageObject[];
-  in_context: string[];
-  new_card: boolean;
-  part_of_speech: string;
-  part_of_speech_ru: string;
-  student_id: number;
-  teacher_id: number;
+  sentences: string[];
+  newCard: boolean;
+  partOfSpeech: string;
+  partOfSpeechRu: string;
+  studentId: number;
+  teacherId: number;
   theme: string;
   translation: string[];
   word: string;
+  audio: string;
 }
 
 interface ImageObject {
   thumb: string;
   original: string;
 }
+
+const prepareAudio = (cardElement: HTMLElement, cardData: CardData) => {
+  const cardAudio = cardElement.querySelector(
+    '.card__back-audio-file'
+  ) as HTMLAudioElement;
+  cardAudio ? (cardAudio.src = cardData.audio) : null;
+};
 
 // functions
 const prepareWord = (cardElement: HTMLElement, cardData: CardData) => {
@@ -39,7 +47,10 @@ const prepareDefinition = (cardElement: HTMLElement, cardData: CardData) => {
     const definition = definitionContainer.querySelector(
       '.card__back-definition-text'
     );
-    definition ? (definition.textContent = cardData.definition) : null;
+    definition
+      ? (definition.textContent =
+          cardData.definition[0].toUpperCase() + cardData.definition.slice(1))
+      : null;
   }
 };
 
@@ -47,38 +58,41 @@ const prepareSentences = (cardElement: HTMLElement, cardData: CardData) => {
   const sentencesContainer = cardElement.querySelector(
     '.card__back-sentences-container'
   );
-  cardData.in_context.forEach((sentence_data, index) => {
-    const sentenceListItem = cardElement
-      .querySelector('.card__back-sentence-item')
-      ?.cloneNode(true) as HTMLElement;
-    const sentence = sentenceListItem.querySelector('.card__back-sentence');
-    if (sentence) {
-      const frontTag = '{it}';
-      const backTag = '{/it}';
-      const textBeforeFrontTag = sentence_data.slice(
-        0,
-        sentence_data.indexOf(frontTag)
-      );
-      const textAfterBackTag = sentence_data
-        .slice(sentence_data.indexOf(backTag))
-        .replace(backTag, '');
-      const span = document.createElement('span');
-      span.classList.add('word-in-sentence');
-      span.textContent = cardData.word;
-      sentence.innerHTML += textBeforeFrontTag;
-      sentence.append(span);
-      sentence.innerHTML += textAfterBackTag;
+  if (cardData.sentences.length > 0) {
+    cardData.sentences.forEach((sentence_data, index) => {
+      const sentenceListItem = cardElement
+        .querySelector('.card__back-sentence-item')
+        ?.cloneNode(true) as HTMLElement;
+      const sentence = sentenceListItem.querySelector('.card__back-sentence');
+      if (sentence) {
+        sentence.textContent = sentence_data;
+      }
+      if (index === 0 && sentenceListItem) {
+        sentenceListItem.classList.add('card__back-sentence-item_active');
+      }
+      sentencesContainer ? sentencesContainer.append(sentenceListItem) : null;
+    });
+    //remove sentence template
+    const sentenceListItemOriginal = cardElement.querySelector(
+      '.card__back-sentence-item'
+    );
+    sentenceListItemOriginal ? sentenceListItemOriginal.remove() : null;
+  } else {
+    const nextSentenceBtn = cardElement.querySelector(
+      '.card__back-next-sentence-btn'
+    ) as HTMLButtonElement;
+    nextSentenceBtn.remove();
+    const sentenceListItemOriginal = cardElement.querySelector(
+      '.card__back-sentence-item'
+    ) as HTMLElement;
+    const sentence = sentenceListItemOriginal.querySelector(
+      '.card__back-sentence'
+    );
+    if (sentence && sentenceListItemOriginal) {
+      sentenceListItemOriginal.classList.add('card__back-sentence-item_active');
+      sentence.textContent = 'К сожалению, примеров предложений нет :(';
     }
-    if (index === 0 && sentenceListItem) {
-      sentenceListItem.classList.add('card__back-sentence-item_active');
-    }
-    sentencesContainer ? sentencesContainer.append(sentenceListItem) : null;
-  });
-  //remove sentence template
-  const sentenceListItemOriginal = cardElement.querySelector(
-    '.card__back-sentence-item'
-  );
-  sentenceListItemOriginal ? sentenceListItemOriginal.remove() : null;
+  }
 };
 
 const createImageModal = (image_data: ImageObject) => {
@@ -226,6 +240,8 @@ const createCard = (cardData: CardData) => {
 
     prepareButtons(cardElement);
 
+    prepareAudio(cardElement, cardData);
+
     return cardElement;
   }
 };
@@ -241,4 +257,4 @@ const renderCard = () => {
     });
 };
 
-renderCard();
+//renderCard();
