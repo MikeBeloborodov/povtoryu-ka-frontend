@@ -1,0 +1,43 @@
+@import 'variables';
+
+.modal {
+  background-color: $modal-background-color;
+  position: relative;
+  padding: 20px;
+  border-radius: $general-border-radius;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: cener;
+  padding: 0 20px;
+}
+
+.modal__text {
+}
+
+.modal__input {
+  block-size: 30px;
+  inline-size: 100%;
+}
+
+.modal__button {
+  inline-size: fit-content;
+  border: none;
+  font-size: 16px;
+  padding: 5px 20px;
+  border-radius: 10px;
+  background-color: $modal-btn-background-color;
+  color: $paragraph-white-color;
+  font-weight: bold;
+  cursor: pointer;
+}

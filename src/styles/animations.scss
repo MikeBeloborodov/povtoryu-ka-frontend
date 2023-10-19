@@ -85,3 +85,12 @@
 .register-btn:hover {
   background-color: $register-btn-hover-color;
 }
+
+.modal__button {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.modal__button:hover {
+  background-color: $modal-btn-hover-color;
+}
