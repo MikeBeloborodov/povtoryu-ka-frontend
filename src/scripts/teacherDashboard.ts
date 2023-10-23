@@ -40,8 +40,8 @@ const createNewStudentModal = () => {
           const cookie = getCookie();
           const data = {
             studentName: nameElement.value,
-            teacherName: cookie.userName,
-            token: cookie.token,
+            teacherName: cookie.teacherUserName,
+            token: cookie.teacherToken,
           };
           const payload = JSON.stringify(data);
           const res = await fetch(
@@ -101,12 +101,15 @@ const getCookie = () => {
 
 const checkToken = async () => {
   const cookie = getCookie();
-  if (!cookie.token || !cookie.userName) {
-    window.location.href = 'http://localhost:3000/pages/loginTeacher.html';
+  if (!cookie.teacherToken || !cookie.teacherUserName) {
+    window.location.href = 'http://localhost:3000/pages/teacherLogin.html';
   } else {
-    const res = await checkTokenDashboard(cookie.token, cookie.userName);
+    const res = await checkTokenDashboard(
+      cookie.teacherToken,
+      cookie.teacherUserName
+    );
     if (!res)
-      window.location.href = 'http://localhost:3000/pages/loginTeacher.html';
+      window.location.href = 'http://localhost:3000/pages/teacherLogin.html';
   }
 };
 

@@ -3,7 +3,7 @@ const loginBtn = document.querySelector('#login-btn');
 const regBtn = document.querySelector('#register-btn');
 //
 // functions
-const setCookieLogin = (key: string, value: string, expiresDays: number) => {
+const setCookie = (key: string, value: string, expiresDays: number) => {
   let date = new Date();
   date.setTime(date.getTime() + expiresDays * 24 * 60 * 60 * 1000);
   document.cookie = `${key}=${value}; expires=${date.toUTCString()};`;
@@ -40,14 +40,14 @@ loginBtn?.addEventListener('click', async (evt) => {
     const serverData = await res.json();
 
     if (res.status === 200) {
-      setCookieLogin('token', serverData.token, 365);
-      setCookieLogin('userName', serverData.userName, 365);
+      setCookie('teacherToken', serverData.token, 365);
+      setCookie('teacherUserName', serverData.userName, 365);
       window.location.href =
         'http://localhost:3000/pages/teacherDashboard.html';
     } else {
       console.log(serverData);
-      setCookieLogin('token', '', -1);
-      setCookieLogin('userName', '', -1);
+      setCookie('teacherToken', '', -1);
+      setCookie('teacherUserName', '', -1);
     }
   } else {
     console.log('error');

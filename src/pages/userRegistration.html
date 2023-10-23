@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Повторю-ка - Вход учителя</title>
+    <title>Повторю-ка - Регистрация пользователя</title>
     <link rel="stylesheet" href="../bundle.css" />
     <link rel="icon" href="../favicons/favicon.ico" sizes="any" />
     <link rel="icon" href="../favicons/favicon.svg" type="image/svg+xml" />
@@ -13,7 +13,7 @@
   <body class="body">
     <main class="login__main">
       <section class="login">
-        <h1 class="login__title">Вход учителя</h1>
+        <h1 class="login__title">Регистрация пользователя</h1>
         <form class="login__form">
           <div class="login__user-name-container">
             <label class="login__user-name-label login-label" for="user-name"
@@ -39,14 +39,19 @@
               placeholder="********"
             />
           </div>
-          <div class="login__btns">
-            <button
-              class="login-btn login-form-btn"
-              type="submit"
-              id="login-btn"
+          <div class="login__password-container">
+            <label class="login-special-label login-label" for="special"
+              >Код</label
             >
-              Вход
-            </button>
+            <input
+              class="login__user-password"
+              type="password"
+              name="special"
+              id="special"
+              placeholder="********"
+            />
+          </div>
+          <div class="login__btns">
             <button class="register-btn login-form-btn" id="register-btn">
               Регистрация
             </button>
@@ -57,7 +62,7 @@
     <!-- 
       <footer class="footer">&copy; 2023 MikeBeloborodov</footer>
     -->
-    <script src="../scripts/index.js"></script>
-    <script src="../scripts/loginTeacher.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script src="../scripts/userRegistration.js" defer></script>
   </body>
 </html>
