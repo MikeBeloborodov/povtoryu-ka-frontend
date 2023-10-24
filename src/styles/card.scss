@@ -1,7 +1,7 @@
 @import 'variables';
 
 .card {
-  background-color: $card-background-color;
+  background-color: $general-background-color;
   border-radius: $general-border-radius;
   inline-size: 100%;
   min-block-size: 500px;
@@ -106,7 +106,7 @@
 .next-btn {
   cursor: pointer;
   border: none;
-  background-color: $next-btn-background-color;
+  background-color: $accent-color-4;
   border-radius: 5px;
   color: $paragraph-white-color;
   font-size: 30px;
@@ -208,17 +208,17 @@
 }
 
 .card__back-controls-remember {
-  background-color: $remember-btn-background-color;
+  background-color: $accent-color-2;
 }
 
 .card__back-controls-remember:hover {
-  background-color: $remember-btn-hover-color;
+  background-color: $accent-color-2-light;
 }
 
 .card__back-controls-forgot {
-  background-color: $forgot-btn-background-color;
+  background-color: $accent-color-1;
 }
 
 .card__back-controls-forgot:hover {
-  background-color: $forgot-btn-hover-color;
+  background-color: $accent-color-1-light;
 }

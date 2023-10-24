@@ -8,7 +8,7 @@
 }
 
 .login {
-  background-color: $login-background-color;
+  background-color: $general-background-color;
   padding: 40px;
   border-radius: $general-border-radius;
   inline-size: 100%;
@@ -56,11 +56,11 @@
 }
 
 .login-btn {
-  background-color: $login-btn-background-color;
+  background-color: $accent-color-1;
 }
 
 .register-btn {
-  background-color: $register-btn-background-color;
+  background-color: $accent-color-2;
 }
 
 .login-form-btn {

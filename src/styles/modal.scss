@@ -1,7 +1,7 @@
 @import 'variables';
 
 .modal {
-  background-color: $modal-background-color;
+  background-color: $general-background-color;
   position: relative;
   padding: 20px;
   border-radius: $general-border-radius;
@@ -36,7 +36,7 @@
   font-size: 16px;
   padding: 5px 20px;
   border-radius: 10px;
-  background-color: $modal-btn-background-color;
+  background-color: $accent-color-2;
   color: $paragraph-white-color;
   font-weight: bold;
   cursor: pointer;

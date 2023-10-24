@@ -24,7 +24,7 @@ registerBtn?.addEventListener('click', async (evt) => {
     const serverData = await res.json();
     console.log(serverData);
     if (res.status === 201) {
-      window.location.href = 'http://localhost:3000/pages/teacherLogin.html';
+      window.location.href = teacherLoginPageURL;
     }
   } else {
     console.log('error');

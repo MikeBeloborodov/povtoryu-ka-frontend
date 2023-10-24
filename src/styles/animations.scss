@@ -79,11 +79,11 @@
 }
 
 .login-btn:hover {
-  background-color: $login-btn-hover-color;
+  background-color: $accent-color-1-light;
 }
 
 .register-btn:hover {
-  background-color: $register-btn-hover-color;
+  background-color: $accent-color-2-light;
 }
 
 .modal__button {
@@ -92,5 +92,5 @@
 }
 
 .modal__button:hover {
-  background-color: $modal-btn-hover-color;
+  background-color: $accent-color-2-light;
 }

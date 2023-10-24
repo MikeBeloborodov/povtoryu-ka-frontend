@@ -2,7 +2,7 @@
 
 .menu {
   margin: 0;
-  background-color: $menu-background-color;
+  background-color: $general-background-color;
   padding: 40px 30px;
   border-radius: $general-border-radius;
   display: flex;
@@ -25,7 +25,7 @@
 }
 
 .new_cards {
-  background-color: $new-cards-bg-color;
+  background-color: $accent-color-1-dark;
 }
 
 .menu__card-title {
@@ -40,7 +40,7 @@
 }
 
 .new_cards .menu__card-amount {
-  background-color: $new-cards-amount-color;
+  background-color: $accent-color-1;
 }
 
 .card_amount {
@@ -48,27 +48,27 @@
 }
 
 .weak_cards {
-  background-color: $weak-cards-bg-color;
+  background-color: $accent-color-2;
 }
 
 .weak_cards .menu__card-amount {
-  background-color: $weak-cards-amount-color;
+  background-color: $accent-color-2-light;
 }
 
 .all_cards {
-  background-color: $all-cards-bg-color;
+  background-color: $accent-color-3;
 }
 
 .all_cards .menu__card-amount {
-  background-color: $all-cards-amount-color;
+  background-color: $accent-color-3-light;
 }
 
 .theme_cards {
-  background-color: $theme-cards-bg-color;
+  background-color: $accent-color-4;
 }
 
 .theme_cards .menu__card-amount {
-  background-color: $theme-cards-amount-color;
+  background-color: $accent-color-4-dark;
 }
 
 .menu__card-category {

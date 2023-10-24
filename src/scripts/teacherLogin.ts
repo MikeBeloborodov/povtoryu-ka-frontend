@@ -1,13 +1,6 @@
 // selectors
 const loginBtn = document.querySelector('#login-btn');
 const regBtn = document.querySelector('#register-btn');
-//
-// functions
-const setCookie = (key: string, value: string, expiresDays: number) => {
-  let date = new Date();
-  date.setTime(date.getTime() + expiresDays * 24 * 60 * 60 * 1000);
-  document.cookie = `${key}=${value}; expires=${date.toUTCString()};`;
-};
 
 regBtn?.addEventListener('click', (evt) => {
   evt.preventDefault();
