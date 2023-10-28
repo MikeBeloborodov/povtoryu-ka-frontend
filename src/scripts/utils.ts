@@ -6,6 +6,7 @@ const userDashboardURL = baseURL + 'pages/userDashboard.html';
 const teacherLoginPageURL = baseURL + 'pages/teacherLogin.html';
 const teacherRegPageURL = baseURL + 'pages/teacherRegistration.html';
 const teacherDashboardURL = baseURL + 'pages/teacherDashboard.html';
+const apiBaseURL = 'http://localhost:8080/api/v1/';
 
 // functions
 const checkTokenOnServer = async (
@@ -27,12 +28,14 @@ const checkTokenOnServer = async (
         body: payload,
         headers: { 'Content-Type': 'application/json' },
       });
+      break;
     case 'teacher':
       response = await fetch('http://localhost:8080/api/v1/teacher/token', {
         method: 'POST',
         body: payload,
         headers: { 'Content-Type': 'application/json' },
       });
+      break;
   }
   serverData = await response.json();
   if (response.status === 200) {
@@ -48,7 +51,10 @@ const checkToken = async (entity: string, redirect_url: string) => {
   switch (entity) {
     case 'student':
       if (!cookie.studentToken && !cookie.studentUserName) {
+        setCookie('studentToken', '', -1);
+        setCookie('studentUserName', '', -1);
         redirect_url ? (window.location.href = redirect_url) : null;
+        return false;
       } else {
         const res = await checkTokenOnServer(
           cookie.studentToken,
@@ -56,20 +62,34 @@ const checkToken = async (entity: string, redirect_url: string) => {
           entity
         );
         if (!res) {
+          setCookie('studentToken', '', -1);
+          setCookie('studentUserName', '', -1);
           redirect_url ? (window.location.href = redirect_url) : null;
+          return false;
+        } else {
+          return true;
         }
       }
-      break;
     case 'teacher':
       if (!cookie.teacherToken || !cookie.teacherUserName) {
+        setCookie('teacherToken', '', -1);
+        setCookie('teacherUserName', '', -1);
         redirect_url ? (window.location.href = redirect_url) : null;
+        return false;
       } else {
         const res = await checkTokenOnServer(
           cookie.teacherToken,
           cookie.teacherUserName,
           entity
         );
-        if (!res) window.location.href = redirect_url;
+        if (!res) {
+          setCookie('teacherToken', '', -1);
+          setCookie('teacherUserName', '', -1);
+          redirect_url ? (window.location.href = redirect_url) : null;
+          return false;
+        } else {
+          return true;
+        }
       }
   }
 };
@@ -88,3 +108,12 @@ const setCookie = (key: string, value: string, expiresDays: number) => {
   date.setTime(date.getTime() + expiresDays * 24 * 60 * 60 * 1000);
   document.cookie = `${key}=${value}; expires=${date.toUTCString()};`;
 };
+
+// Interfaces
+interface StudentData {
+  id: number;
+  nickname: string;
+  userName: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

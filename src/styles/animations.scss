@@ -94,3 +94,21 @@
 .modal__button:hover {
   background-color: $accent-color-2-light;
 }
+
+.controls__new-student-btn {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.controls__new-student-btn:hover {
+  background-color: $accent-color-4-dark;
+}
+
+.students__item-container {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.students__item-container:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

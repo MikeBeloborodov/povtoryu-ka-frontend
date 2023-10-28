@@ -3,7 +3,10 @@ const loginUserBtn = document.querySelector('#login-btn');
 const regUserBtn = document.querySelector('#register-btn');
 
 // invocations;
-checkToken('student', '');
+(async () => {
+  const res = await checkToken('student', '');
+  res ? (window.location.href = userDashboardURL) : null;
+})();
 
 // event listeners
 regUserBtn?.addEventListener('click', (evt) => {

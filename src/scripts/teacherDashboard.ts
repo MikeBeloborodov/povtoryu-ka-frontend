@@ -2,15 +2,22 @@
 const modalSource = document.querySelector('#modal') as HTMLTemplateElement;
 const modalTemplate = modalSource.content;
 const newStudentBtn = document.querySelector('#new-student-btn');
+const studentsSource = document.querySelector(
+  '#student'
+) as HTMLTemplateElement;
+const studentTemplate = studentsSource.content;
+const studentsList = document.querySelector(
+  '#students-list'
+) as HTMLUListElement;
 
 // functions
 const createNewStudentModal = () => {
-  const modalBackdrop = modalTemplate
-    ?.querySelector('.modal__backdrop')
+  const modalContainer = modalTemplate
+    ?.querySelector('.modal__container')
     ?.cloneNode(true) as HTMLElement;
-  if (modalBackdrop) {
+  if (modalContainer) {
     // text
-    const modalElement = modalBackdrop.querySelector('.modal');
+    const modalElement = modalContainer.querySelector('.modal');
     if (modalElement) {
       const text1 = document.createElement('p');
       text1.classList.add('modal__text');
@@ -61,14 +68,61 @@ const createNewStudentModal = () => {
           }
         }
       });
+
+      // modal removal
+      const modalBackdrop = modalContainer.querySelector('.modal__backdrop');
+      modalBackdrop?.addEventListener('click', () => {
+        modalContainer.remove();
+      });
+
       modalElement.append(text1);
       modalElement.append(text2);
       modalElement.append(input);
       modalElement.append(button);
-      modalBackdrop.append(modalElement);
-      document.body.append(modalBackdrop);
+      modalContainer.append(modalElement);
+      document.body.append(modalContainer);
     }
   }
+};
+
+const getStudentsData = async () => {
+  const cookie = getCookie();
+  const data = {
+    teacherName: cookie.teacherUserName,
+    token: cookie.teacherToken,
+  };
+  const payload = JSON.stringify(data);
+  const res = await fetch(apiBaseURL + 'users/', {
+    method: 'POST',
+    body: payload,
+    headers: { 'Content-Type': 'application/json' },
+  });
+  const serverData = await res.json();
+  if (res.status !== 200) {
+    console.log('Error, call admin');
+    console.log(serverData);
+    return null;
+  } else {
+    return serverData;
+  }
+};
+
+const fillStudentsTable = async () => {
+  const studentsData = await getStudentsData();
+  console.log(studentsData);
+  studentsData.forEach((student: StudentData) => {
+    const studentElement = studentTemplate
+      .querySelector('.students__item')
+      ?.cloneNode(true) as HTMLLIElement;
+    if (studentElement) {
+      const nameElement = studentElement.querySelector(
+        '.students__item-name'
+      ) as HTMLParagraphElement;
+      nameElement.innerText = student.nickname;
+      studentElement.id = student.id.toString();
+      studentsList.append(studentElement);
+    }
+  });
 };
 
 // listeners
@@ -77,4 +131,8 @@ newStudentBtn?.addEventListener('click', () => {
 });
 
 // invocations;
-checkToken('teacher', teacherLoginPageURL);
+(async () => {
+  if (await checkToken('teacher', teacherLoginPageURL)) {
+    await fillStudentsTable();
+  }
+})();

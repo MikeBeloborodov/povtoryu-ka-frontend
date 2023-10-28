@@ -1,0 +1,75 @@
+@import '../variables';
+
+.teacher-dashboard-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.controls {
+  background-color: $general-background-color;
+  inline-size: 100%;
+  padding: 20px;
+  border-radius: $general-border-radius;
+  box-shadow: $general-box-shadow;
+}
+
+.teacher-dashboard-title {
+  font-size: 20px;
+  margin: 0 0 10px 10px;
+}
+
+.controls__title {
+  margin: 0 0 20px 10px;
+}
+
+.controls__new-student-btn {
+  border: none;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: $paragraph-white-color;
+  background-color: $accent-color-4;
+  cursor: pointer;
+}
+
+.students {
+  background-color: $general-background-color;
+  inline-size: 100%;
+  padding: 20px;
+  border-radius: $general-border-radius;
+  box-shadow: $general-box-shadow;
+}
+
+.students__item {
+  cursor: pointer;
+  padding: 10px 0;
+}
+
+.students__item-container {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 18px;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 20px 10px;
+}
+
+.students__item:not(:last-child) {
+  border-bottom: 1px solid $accent-color-4;
+}
+
+.students__item-stats-new-cards {
+  color: $accent-color-2;
+}
+
+.students__item-stats-review-cards {
+  color: $accent-color-1;
+}
+
+.students__item-name {
+  font-size: 18px;
+}

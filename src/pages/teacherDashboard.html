@@ -11,11 +11,17 @@
     <link rel="apple-touch-icon" href="../favicons/mobile-icon.png" />
   </head>
   <body class="body">
-    <main class="main">
+    <main class="teacher-dashboard-main">
+      <h1 class="visually-hidden">Панель управления учителя</h1>
       <section class="controls">
-        <button class="controls__new-student" id="new-student-btn">
+        <h2 class="controls__title teacher-dashboard-title">Управление</h2>
+        <button class="controls__new-student-btn" id="new-student-btn">
           Пригласить ученика
         </button>
+      </section>
+      <section class="students">
+        <h2 class="students__title teacher-dashboard-title">Ученики</h2>
+        <ul class="students__list" id="students-list"></ul>
       </section>
     </main>
     <!-- 
@@ -26,9 +32,25 @@
 
     <!-- Modal template -->
     <template id="modal">
-      <div class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__backdrop"></div>
         <div class="modal"></div>
       </div>
+    </template>
+    <!-- Student template -->
+    <template id="student">
+      <li class="students__item">
+        <div class="students__item-container">
+          <p class="students__item-name"></p>
+          <div class="students__item-stats">
+            <span class="students__item-stats-new-cards">10</span>
+            \
+            <span class="students__item-stats-review-cards">35</span>
+            \
+            <span class="sutdents__item-stats-total-cards">100</span>
+          </div>
+        </div>
+      </li>
     </template>
   </body>
 </html>
