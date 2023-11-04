@@ -1,39 +1,41 @@
 // urls
 const baseURL = 'http://localhost:3000/';
-const userLoginPageURL = baseURL;
-const userRegPageURL = baseURL + 'pages/userRegistration.html';
-const userDashboardURL = baseURL + 'pages/userDashboard.html';
+const studentLoginPageURL = baseURL;
+const studentRegPageURL = baseURL + 'pages/studentRegistration.html';
+const studentDashboardURL = baseURL + 'pages/studentDashboard.html';
 const teacherLoginPageURL = baseURL + 'pages/teacherLogin.html';
 const teacherRegPageURL = baseURL + 'pages/teacherRegistration.html';
 const teacherDashboardURL = baseURL + 'pages/teacherDashboard.html';
 const apiBaseURL = 'http://localhost:8080/api/v1/';
+const apiCheckTeacherTokenURL = apiBaseURL + 'teacher/token';
+const apiCheckStudentTokenURL = apiBaseURL + 'student/token';
+const apiStudentNewCodeURL = apiBaseURL + 'student/code/new';
+const apiTeacherRegisterURL = apiBaseURL + 'teacher/register';
+const apiStudentRegisterURL = apiBaseURL + 'student/register';
+const apiStudentLoginURL = apiBaseURL + 'student/login';
+const apiTeacherLoginURL = apiBaseURL + 'teacher/login';
 
 // functions
-const checkTokenOnServer = async (
-  token: string,
-  userName: string,
-  entity: string
-) => {
-  const data = {
-    token: token,
-    userName: userName,
-  };
-  const payload = JSON.stringify(data);
-  let serverData;
+const checkTokenOnServer = async (token: string, entity: string) => {
+  let serverData: any;
   let response: any;
   switch (entity) {
     case 'student':
-      response = await fetch('http://localhost:8080/api/v1/user/token', {
-        method: 'POST',
-        body: payload,
-        headers: { 'Content-Type': 'application/json' },
+      response = await fetch(apiCheckStudentTokenURL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       });
       break;
     case 'teacher':
-      response = await fetch('http://localhost:8080/api/v1/teacher/token', {
-        method: 'POST',
-        body: payload,
-        headers: { 'Content-Type': 'application/json' },
+      response = await fetch(apiCheckTeacherTokenURL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       });
       break;
   }
@@ -50,17 +52,12 @@ const checkToken = async (entity: string, redirect_url: string) => {
   const cookie = getCookie();
   switch (entity) {
     case 'student':
-      if (!cookie.studentToken && !cookie.studentUserName) {
+      if (!cookie.studentToken) {
         setCookie('studentToken', '', -1);
-        setCookie('studentUserName', '', -1);
         redirect_url ? (window.location.href = redirect_url) : null;
         return false;
       } else {
-        const res = await checkTokenOnServer(
-          cookie.studentToken,
-          cookie.studentUserName,
-          entity
-        );
+        const res = await checkTokenOnServer(cookie.studentToken, entity);
         if (!res) {
           setCookie('studentToken', '', -1);
           setCookie('studentUserName', '', -1);
@@ -71,20 +68,14 @@ const checkToken = async (entity: string, redirect_url: string) => {
         }
       }
     case 'teacher':
-      if (!cookie.teacherToken || !cookie.teacherUserName) {
+      if (!cookie.teacherToken) {
         setCookie('teacherToken', '', -1);
-        setCookie('teacherUserName', '', -1);
         redirect_url ? (window.location.href = redirect_url) : null;
         return false;
       } else {
-        const res = await checkTokenOnServer(
-          cookie.teacherToken,
-          cookie.teacherUserName,
-          entity
-        );
+        const res = await checkTokenOnServer(cookie.teacherToken, entity);
         if (!res) {
           setCookie('teacherToken', '', -1);
-          setCookie('teacherUserName', '', -1);
           redirect_url ? (window.location.href = redirect_url) : null;
           return false;
         } else {
@@ -106,7 +97,7 @@ const getCookie = () => {
 const setCookie = (key: string, value: string, expiresDays: number) => {
   let date = new Date();
   date.setTime(date.getTime() + expiresDays * 24 * 60 * 60 * 1000);
-  document.cookie = `${key}=${value}; expires=${date.toUTCString()};`;
+  document.cookie = `${key}=${value}; expires=${date.toUTCString()}`;
 };
 
 // Interfaces

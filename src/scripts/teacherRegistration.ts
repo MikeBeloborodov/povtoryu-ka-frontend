@@ -16,7 +16,7 @@ registerBtn?.addEventListener('click', async (evt) => {
     };
     const payload = JSON.stringify(data);
 
-    const res = await fetch('http://localhost:8080/api/v1/teacher', {
+    const res = await fetch(apiTeacherRegisterURL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: payload,

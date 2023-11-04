@@ -1,2 +1,0 @@
-// invocations;
-checkToken('student', userLoginPageURL);

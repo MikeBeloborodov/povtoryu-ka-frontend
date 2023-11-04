@@ -4,7 +4,7 @@ const regBtn = document.querySelector('#register-btn');
 
 regBtn?.addEventListener('click', (evt) => {
   evt.preventDefault();
-  window.location.href = 'http://localhost:3000/pages/teacherRegistration.html';
+  window.location.href = teacherRegPageURL;
 });
 
 loginBtn?.addEventListener('click', async (evt) => {
@@ -25,7 +25,7 @@ loginBtn?.addEventListener('click', async (evt) => {
 
     const payload = JSON.stringify(data);
 
-    const res = await fetch('http://localhost:8080/api/v1/teacher/login', {
+    const res = await fetch(apiTeacherLoginURL, {
       method: 'POST',
       body: payload,
       headers: { 'Content-Type': 'application/json' },
@@ -34,13 +34,10 @@ loginBtn?.addEventListener('click', async (evt) => {
 
     if (res.status === 200) {
       setCookie('teacherToken', serverData.token, 365);
-      setCookie('teacherUserName', serverData.userName, 365);
-      window.location.href =
-        'http://localhost:3000/pages/teacherDashboard.html';
+      window.location.href = teacherDashboardURL;
     } else {
       console.log(serverData);
       setCookie('teacherToken', '', -1);
-      setCookie('teacherUserName', '', -1);
     }
   } else {
     console.log('error');

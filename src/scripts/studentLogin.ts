@@ -5,13 +5,13 @@ const regUserBtn = document.querySelector('#register-btn');
 // invocations;
 (async () => {
   const res = await checkToken('student', '');
-  res ? (window.location.href = userDashboardURL) : null;
+  res ? (window.location.href = studentDashboardURL) : null;
 })();
 
 // event listeners
 regUserBtn?.addEventListener('click', (evt) => {
   evt.preventDefault();
-  window.location.href = 'http://localhost:3000/pages/userRegistration.html';
+  window.location.href = studentRegPageURL;
 });
 
 loginUserBtn?.addEventListener('click', async (evt) => {
@@ -32,7 +32,7 @@ loginUserBtn?.addEventListener('click', async (evt) => {
 
     const payload = JSON.stringify(data);
 
-    const res = await fetch('http://localhost:8080/api/v1/user/login', {
+    const res = await fetch(apiStudentLoginURL, {
       method: 'POST',
       body: payload,
       headers: { 'Content-Type': 'application/json' },
@@ -40,13 +40,12 @@ loginUserBtn?.addEventListener('click', async (evt) => {
     const serverData = await res.json();
 
     if (res.status === 200) {
+      console.log(serverData);
       setCookie('studentToken', serverData.token, 365);
-      setCookie('studentUserName', serverData.userName, 365);
-      window.location.href = 'http://localhost:3000/pages/userDashboard.html';
+      window.location.href = studentDashboardURL;
     } else {
       console.log(serverData);
       setCookie('studentToken', '', -1);
-      setCookie('studentUserName', '', -1);
     }
   } else {
     console.log('error');

@@ -1,7 +1,7 @@
 // selectors
-const registerUserBtn = document.querySelector('#register-btn');
+const registerStudentBtn = document.querySelector('#register-btn');
 
-registerUserBtn?.addEventListener('click', async (evt) => {
+registerStudentBtn?.addEventListener('click', async (evt) => {
   evt.preventDefault();
 
   const userName = document.querySelector('#user-name') as HTMLInputElement;
@@ -16,7 +16,7 @@ registerUserBtn?.addEventListener('click', async (evt) => {
     };
     const payload = JSON.stringify(data);
 
-    const res = await fetch('http://localhost:8080/api/v1/user', {
+    const res = await fetch(apiStudentRegisterURL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: payload,
@@ -24,7 +24,7 @@ registerUserBtn?.addEventListener('click', async (evt) => {
     const serverData = await res.json();
     console.log(serverData);
     if (res.status === 201) {
-      window.location.href = 'http://localhost:3000/pages/userLogin.html';
+      window.location.href = baseURL;
     }
   } else {
     console.log('error');

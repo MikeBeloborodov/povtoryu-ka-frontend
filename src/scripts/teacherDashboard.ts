@@ -47,18 +47,16 @@ const createNewStudentModal = () => {
           const cookie = getCookie();
           const data = {
             studentName: nameElement.value,
-            teacherName: cookie.teacherUserName,
-            token: cookie.teacherToken,
           };
           const payload = JSON.stringify(data);
-          const res = await fetch(
-            'http://localhost:8080/api/v1/user/token/new',
-            {
-              method: 'POST',
-              body: payload,
-              headers: { 'Content-Type': 'application/json' },
-            }
-          );
+          const res = await fetch(apiStudentNewCodeURL, {
+            body: payload,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          });
           const serverData = await res.json();
           if (res.status === 201) {
             input.value = serverData.code;
