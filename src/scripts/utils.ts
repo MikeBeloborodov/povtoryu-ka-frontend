@@ -14,6 +14,8 @@ const apiTeacherRegisterURL = apiBaseURL + 'teacher/register';
 const apiStudentRegisterURL = apiBaseURL + 'student/register';
 const apiStudentLoginURL = apiBaseURL + 'student/login';
 const apiTeacherLoginURL = apiBaseURL + 'teacher/login';
+const apiGetStudentsURL = apiBaseURL + 'students';
+const apiSaveWordCard = apiBaseURL + 'cards/word/new';
 
 // functions
 const checkTokenOnServer = async (token: string, entity: string) => {
@@ -50,6 +52,7 @@ const checkTokenOnServer = async (token: string, entity: string) => {
 
 const checkToken = async (entity: string, redirect_url: string) => {
   const cookie = getCookie();
+  let res: any;
   switch (entity) {
     case 'student':
       if (!cookie.studentToken) {
@@ -57,7 +60,11 @@ const checkToken = async (entity: string, redirect_url: string) => {
         redirect_url ? (window.location.href = redirect_url) : null;
         return false;
       } else {
-        const res = await checkTokenOnServer(cookie.studentToken, entity);
+        try {
+          res = await checkTokenOnServer(cookie.studentToken, entity);
+        } catch (error) {
+          console.log(error);
+        }
         if (!res) {
           setCookie('studentToken', '', -1);
           setCookie('studentUserName', '', -1);
@@ -73,7 +80,11 @@ const checkToken = async (entity: string, redirect_url: string) => {
         redirect_url ? (window.location.href = redirect_url) : null;
         return false;
       } else {
-        const res = await checkTokenOnServer(cookie.teacherToken, entity);
+        try {
+          res = await checkTokenOnServer(cookie.teacherToken, entity);
+        } catch (error) {
+          console.log(error);
+        }
         if (!res) {
           setCookie('teacherToken', '', -1);
           redirect_url ? (window.location.href = redirect_url) : null;
@@ -100,6 +111,33 @@ const setCookie = (key: string, value: string, expiresDays: number) => {
   document.cookie = `${key}=${value}; expires=${date.toUTCString()}`;
 };
 
+const createRightClickMenu = (
+  items: (string | Function)[],
+  studentId: number
+) => {
+  const menuBox = document.createElement('ul');
+  menuBox.classList.add('right-click-list');
+
+  for (let i = 1; i < items.length + 1; i++) {
+    if (i % 2 !== 0) {
+      const menuItem = document.createElement('li');
+      const menuItemContainer = document.createElement('div');
+      menuItemContainer.classList.add('right-click-item-container');
+      menuItem.classList.add('right-click-item');
+      menuItem.textContent = items[i - 1] as string;
+      const handler = items[i] as Function;
+      menuItem.addEventListener('click', () => {
+        handler(studentId);
+      });
+      menuItemContainer.append(menuItem);
+      menuBox.append(menuItemContainer);
+    } else {
+      continue;
+    }
+  }
+  return menuBox;
+};
+
 // Interfaces
 interface StudentData {
   id: number;
@@ -107,4 +145,16 @@ interface StudentData {
   userName: string;
   createdAt: Date;
   updatedAt: Date;
+  newCards: number;
+  reviewCards: number;
+  allCards: number;
+}
+
+interface newCardForm extends HTMLFormControlsCollection {
+  word: HTMLInputElement;
+  pos: RadioNodeList;
+  image: HTMLInputElement;
+  sentence: HTMLTextAreaElement;
+  definition: HTMLTextAreaElement;
+  translation: HTMLInputElement;
 }

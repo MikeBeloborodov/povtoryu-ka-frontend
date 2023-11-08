@@ -56,3 +56,39 @@
   color: $accent-color-4;
   margin: 20px 0 20px 0;
 }
+
+.right-click-list {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  padding: 20px;
+  border-radius: $general-border-radius;
+  background-color: $general-background-color;
+  box-shadow: $general-box-shadow;
+  border-top-left-radius: 0;
+  z-index: 3;
+}
+
+.right-click-item-container {
+  padding: 5px 0;
+  inline-size: 100%;
+}
+
+.right-click-item-container:not(:last-child) {
+  border-bottom: 1px solid $accent-color-4;
+}
+
+.right-click-item {
+  padding: 10px 10px 10px 15px;
+  border-radius: 10px;
+  inline-size: 100%;
+  cursor: pointer;
+}
+
+.close-right-click-menu-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}

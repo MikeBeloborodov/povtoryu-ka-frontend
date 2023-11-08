@@ -112,3 +112,12 @@
 .students__item-container:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+.right-click-item {
+  transition: background-color 0.3s;
+  transition-timing-function: ease;
+}
+
+.right-click-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

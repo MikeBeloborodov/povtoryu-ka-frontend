@@ -45,7 +45,6 @@
 }
 
 .students__item {
-  cursor: pointer;
   padding: 10px 0;
 }
 
@@ -56,6 +55,7 @@
   inline-size: 100%;
   block-size: 100%;
   padding: 20px 10px;
+  cursor: pointer;
 }
 
 .students__item:not(:last-child) {
