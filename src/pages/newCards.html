@@ -29,6 +29,15 @@
           <button class="card__front-button">
             <span class="card__front-word"></span>
           </button>
+          <form class="card__front-answer-form" name="answer">
+            <input
+              class="card__front-answer-input"
+              id="answer"
+              type="text"
+              placeholder="Перевод"
+              autocomplete="off"
+            />
+          </form>
         </section>
         <section class="card__back">
           <h2 class="card__back-title visually-hidden">Оборот карточки</h2>
@@ -78,16 +87,10 @@
           </section>
           <section class="card__back-controls">
             <button
-              class="card__back-controls-forgot card-control-btn"
-              id="forgot-btn"
+              class="card__back-controls-next card-control-btn"
+              id="next-btn"
             >
-              Не помню
-            </button>
-            <button
-              class="card__back-controls-remember card-control-btn"
-              id="remember-btn"
-            >
-              Помню
+              Продолжить
             </button>
           </section>
         </section>

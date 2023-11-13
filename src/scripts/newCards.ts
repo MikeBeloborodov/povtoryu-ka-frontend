@@ -3,37 +3,57 @@ const cardSource: HTMLTemplateElement | null = document.querySelector('#card');
 const cardTemplate = cardSource?.content;
 const trainerSection = document.querySelector('.trainer');
 
-// interfaces
-interface CardData {
-  category: string;
-  definition: string;
-  id: number;
-  images: ImageObject[];
-  sentences: string[];
-  newCard: boolean;
-  partOfSpeech: string;
-  partOfSpeechRu: string;
-  studentId: number;
-  teacherId: number;
-  theme: string;
-  translation: string[];
-  word: string;
-  audio: string;
-}
+// functions
+const nextCardOnEnterHandler = async (evt: KeyboardEvent) => {
+  if (evt.key === 'Enter') {
+    document.removeEventListener('keydown', nextCardOnEnterHandler, true);
+    const card = document.querySelector('.card');
+    card ? card.remove() : null;
+    await displayNewCard();
+  }
+};
 
-interface ImageObject {
-  thumb: string;
-  original: string;
-}
+const displayNewCard = async () => {
+  const cardData = await getNewWordCard();
+  const card = createCard(cardData);
+  if (trainerSection && card) {
+    trainerSection.append(card);
+  }
+  setCardTriggers(cardData);
+};
+
+const setCardTriggers = async (cardData: CardData) => {
+  const card: HTMLElement | null = await waitForElement('.card');
+  if (card) {
+    const cardFront = card.querySelector('.card__front');
+    const cardBack = card.querySelector('.card__back');
+    const cardNextBtn = card.querySelector('.card__back-controls-next');
+    const answerForm = document.forms.namedItem('answer');
+    const elements = answerForm?.elements as answerForm;
+    const answer = elements.answer;
+    answer.focus();
+
+    answerForm?.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      cardFront?.classList.remove('card__front_active');
+      cardBack?.classList.add('card__back_active');
+      document.addEventListener('keydown', nextCardOnEnterHandler);
+    });
+
+    cardNextBtn?.addEventListener('click', async (evt) => {
+      card.remove();
+      await displayNewCard();
+    });
+  }
+};
 
 const prepareAudio = (cardElement: HTMLElement, cardData: CardData) => {
   const cardAudio = cardElement.querySelector(
-    '.card__back-audio-file'
+    '.card__back-audio'
   ) as HTMLAudioElement;
+  if (!cardData.audio) cardAudio.remove();
   cardAudio ? (cardAudio.src = cardData.audio) : null;
 };
-
-// functions
 const prepareWord = (cardElement: HTMLElement, cardData: CardData) => {
   const cardWord = cardElement.querySelector('.card__front-word');
   cardWord ? (cardWord.textContent = cardData.word) : null;
@@ -65,7 +85,7 @@ const prepareSentences = (cardElement: HTMLElement, cardData: CardData) => {
         ?.cloneNode(true) as HTMLElement;
       const sentence = sentenceListItem.querySelector('.card__back-sentence');
       if (sentence) {
-        sentence.textContent = sentence_data;
+        sentence.textContent = sentence_data.sentence;
       }
       if (index === 0 && sentenceListItem) {
         sentenceListItem.classList.add('card__back-sentence-item_active');
@@ -102,7 +122,7 @@ const createImageModal = (image_data: ImageObject) => {
   modalContent.classList.add('image-modal__content');
   const modalImage = document.createElement('img');
   modalImage.classList.add('image-modal__image');
-  modalImage.src = image_data.original;
+  modalImage.src = image_data.url;
   modalContent.append(modalImage);
   modal.append(modalContent);
 
@@ -126,7 +146,7 @@ const prepareImages = (cardElement: HTMLElement, cardData: CardData) => {
       document.body.append(modal);
       scroll(0, 0);
     });
-    image ? (image.src = image_data.thumb) : null;
+    image ? (image.src = image_data.url) : null;
     if (index === 0 && imageListItem) {
       imageListItem.classList.add('card__back-image-item_active');
     }
@@ -143,14 +163,16 @@ const prepareTranslations = (cardElement: HTMLElement, cardData: CardData) => {
   const translationsContainer = cardElement.querySelector(
     '.card__back-translations-container'
   );
-  cardData.translation.forEach((translation_data, index) => {
+  cardData.translations.forEach((translation_data, index) => {
     const translationListItem = cardElement
       .querySelector('.card__back-translations-item')
       ?.cloneNode(true) as HTMLElement;
     const translation = translationListItem.querySelector(
       '.card__back-translation'
     );
-    translation ? (translation.textContent = translation_data) : null;
+    translation
+      ? (translation.textContent = translation_data.translation)
+      : null;
     if (index === 0 && translationListItem) {
       translationListItem.classList.add('card__back-translations-item_active');
     }
@@ -158,14 +180,14 @@ const prepareTranslations = (cardElement: HTMLElement, cardData: CardData) => {
       ? translationsContainer.append(translationListItem)
       : null;
   });
-  // remove translation template
+  // remove translations template
   const translationListItemOriginal = cardElement.querySelector(
     '.card__back-translations-item'
   );
   translationListItemOriginal ? translationListItemOriginal.remove() : null;
 };
 
-const prepareButtons = (cardElement: HTMLElement) => {
+const prepareButtons = (cardElement: HTMLElement, cardData: CardData) => {
   // buttons
   const nextSentenceBtn = cardElement.querySelector(
     '.card__back-next-sentence-btn'
@@ -176,6 +198,11 @@ const prepareButtons = (cardElement: HTMLElement) => {
   const nextTranslationBtn = cardElement.querySelector(
     '.card__back-next-translation-btn'
   ) as HTMLButtonElement;
+
+  // remove buttons if no more data is available
+  if (cardData.sentences.length <= 1) nextSentenceBtn.remove();
+  if (cardData.images.length <= 1) nextImageBtn.remove();
+  if (cardData.translations.length <= 1) nextTranslationBtn.remove();
 
   // event listeners
   nextSentenceBtn?.addEventListener('click', () => {
@@ -238,7 +265,7 @@ const createCard = (cardData: CardData) => {
 
     prepareTranslations(cardElement, cardData);
 
-    prepareButtons(cardElement);
+    prepareButtons(cardElement, cardData);
 
     prepareAudio(cardElement, cardData);
 
@@ -257,4 +284,13 @@ const renderCard = () => {
     });
 };
 
-//renderCard();
+// invocations;
+(async () => {
+  if (await checkToken('student', studentLoginPageURL)) {
+    try {
+      await displayNewCard();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+})();

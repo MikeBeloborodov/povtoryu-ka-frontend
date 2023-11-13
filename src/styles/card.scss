@@ -25,7 +25,6 @@
   justify-content: center;
   align-items: center;
   block-size: 100%;
-  cursor: pointer;
   position: relative;
   z-index: 1;
   opacity: 1;
@@ -36,6 +35,22 @@
   background-color: inherit;
   border: none;
   font-size: 40px;
+}
+
+.card__front-answer-form {
+  display: flex;
+  gap: 10px;
+  inline-size: 100%;
+  margin: 40px 0 0 0;
+}
+
+.card__front-answer-input {
+  font-size: 18px;
+  inline-size: 100%;
+  block-size: 40px;
+  border-radius: $general-border-radius;
+  margin: 0 20px;
+  padding: 0 20px;
 }
 
 .card__front-word {
@@ -146,11 +161,15 @@
   z-index: 1;
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .card__back-image {
-  object-fit: cover;
-  object-position: center;
+  inline-size: max-content;
+  block-size: 100%;
 }
 
 .card__back-next-image-btn {
@@ -198,7 +217,7 @@
 .card-control-btn {
   cursor: pointer;
   display: block;
-  padding: 10px 0;
+  padding: 10px 10px;
   border: none;
   font-size: 16px;
   border-radius: 10px;
@@ -207,11 +226,11 @@
   min-inline-size: 100px;
 }
 
-.card__back-controls-remember {
+.card__back-controls-next {
   background-color: $accent-color-2;
 }
 
-.card__back-controls-remember:hover {
+.card__back-controls-next:hover {
   background-color: $accent-color-2-light;
 }
 

@@ -9,15 +9,6 @@
   transform: scale(1.02);
 }
 
-.card:has(.card__front_active) {
-  transition: background-color 0.3s;
-  transition-timing-function: ease;
-}
-
-.card:has(.card__front_active):hover {
-  background-color: #f2f2f2;
-}
-
 .card__back-sentence-item {
   transition:
     opacity 0.3s,

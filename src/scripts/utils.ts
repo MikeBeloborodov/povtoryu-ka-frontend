@@ -16,8 +16,54 @@ const apiStudentLoginURL = apiBaseURL + 'student/login';
 const apiTeacherLoginURL = apiBaseURL + 'teacher/login';
 const apiGetStudentsURL = apiBaseURL + 'students';
 const apiSaveWordCard = apiBaseURL + 'cards/word/new';
+const apiGetStudentOwnData = apiBaseURL + 'student/own';
+const apiGetNewWordCard = apiBaseURL + 'cards/word/study/new';
 
 // functions
+const getNewWordCard = async () => {
+  const cookie = getCookie();
+  let res;
+  try {
+    res = await fetch(apiGetNewWordCard, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${cookie.studentToken}`,
+      },
+    });
+    if (res.status !== 200) {
+      throw new Error('Problems with the server.');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error('Problems with the server.');
+  }
+  const serverData = await res.json();
+  return serverData;
+};
+
+const returnStudentData = async () => {
+  const cookie = getCookie();
+  let res;
+  try {
+    res = await fetch(apiGetStudentOwnData, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${cookie.studentToken}`,
+      },
+    });
+    if (res.status !== 200) {
+      throw new Error('Problems with the server.');
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error('Problems with the server.');
+  }
+  const serverData = await res.json();
+  return serverData;
+};
+
 const checkTokenOnServer = async (token: string, entity: string) => {
   let serverData: any;
   let response: any;
@@ -157,4 +203,47 @@ interface newCardForm extends HTMLFormControlsCollection {
   sentence: HTMLTextAreaElement;
   definition: HTMLTextAreaElement;
   translation: HTMLInputElement;
+}
+
+interface answerForm extends HTMLFormControlsCollection {
+  answer: HTMLInputElement;
+}
+
+interface studentOwnData {
+  id: number;
+  newCards: number;
+  reviewCards: number;
+  allCards: number;
+  role: string;
+  userName: string;
+}
+
+interface CardData {
+  definition: string;
+  id: number;
+  images: ImageObject[];
+  sentences: SentenceObject[];
+  newCard: boolean;
+  partOfSpeech: string;
+  partOfSpeechRu: string;
+  studentId: number;
+  teacherId: number;
+  translations: TranslationObject[];
+  word: string;
+  audio: string;
+}
+
+interface ImageObject {
+  id: number;
+  url: string;
+}
+
+interface SentenceObject {
+  id: number;
+  sentence: string;
+}
+
+interface TranslationObject {
+  id: number;
+  translation: string;
 }
