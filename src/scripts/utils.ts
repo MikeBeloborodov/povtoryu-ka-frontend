@@ -20,28 +20,6 @@ const apiGetStudentOwnData = apiBaseURL + 'student/own';
 const apiGetNewWordCard = apiBaseURL + 'cards/word/study/new';
 
 // functions
-const getNewWordCard = async () => {
-  const cookie = getCookie();
-  let res;
-  try {
-    res = await fetch(apiGetNewWordCard, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cookie.studentToken}`,
-      },
-    });
-    if (res.status !== 200) {
-      throw new Error('Problems with the server.');
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error('Problems with the server.');
-  }
-  const serverData = await res.json();
-  return serverData;
-};
-
 const returnStudentData = async () => {
   const cookie = getCookie();
   let res;

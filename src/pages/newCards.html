@@ -18,6 +18,7 @@
       <footer class="footer">&copy; 2023 MikeBeloborodov</footer>
     -->
     <script src="../scripts/utils.js"></script>
+    <script src="../scripts/api.js"></script>
     <script src="../scripts/newCards.js" defer></script>
     <script src="../scripts/card.js" defer></script>
 
@@ -36,7 +37,13 @@
               type="text"
               placeholder="Перевод"
               autocomplete="off"
+              required
+              minlength="1"
+              maxlength="40"
+              pattern="[а-яА-яёЁ\s\-]+$"
+              data-error-message="Разрешены только кириллические буквы, знаки дефиса и пробелы"
             />
+            <span class="card__front-answer-error"></span>
           </form>
         </section>
         <section class="card__back">

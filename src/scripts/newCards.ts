@@ -4,47 +4,57 @@ const cardTemplate = cardSource?.content;
 const trainerSection = document.querySelector('.trainer');
 
 // functions
-const nextCardOnEnterHandler = async (evt: KeyboardEvent) => {
-  if (evt.key === 'Enter') {
-    document.removeEventListener('keydown', nextCardOnEnterHandler, true);
-    const card = document.querySelector('.card');
-    card ? card.remove() : null;
-    await displayNewCard();
-  }
+const displayNewCard = () => {
+  getNewWordCard()
+    .then((cardData) => {
+      const card = createCard(cardData);
+      if (trainerSection && card) {
+        trainerSection.append(card);
+        setCardTriggers(card);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-const displayNewCard = async () => {
-  const cardData = await getNewWordCard();
-  const card = createCard(cardData);
-  if (trainerSection && card) {
-    trainerSection.append(card);
-  }
-  setCardTriggers(cardData);
-};
+const setCardTriggers = async (card: HTMLElement) => {
+  const cardFront = card.querySelector('.card__front');
+  const cardBack = card.querySelector('.card__back');
+  const cardNextBtn = card.querySelector('.card__back-controls-next');
+  const answerForm = document.forms.namedItem('answer');
+  const errorSpan = answerForm?.querySelector('.card__front-answer-error');
+  const elements = answerForm?.elements as answerForm;
+  const answer = elements.answer;
+  answer.focus();
 
-const setCardTriggers = async (cardData: CardData) => {
-  const card: HTMLElement | null = await waitForElement('.card');
-  if (card) {
-    const cardFront = card.querySelector('.card__front');
-    const cardBack = card.querySelector('.card__back');
-    const cardNextBtn = card.querySelector('.card__back-controls-next');
-    const answerForm = document.forms.namedItem('answer');
-    const elements = answerForm?.elements as answerForm;
-    const answer = elements.answer;
-    answer.focus();
+  answerForm?.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    cardFront?.classList.remove('card__front_active');
+    cardBack?.classList.add('card__back_active');
+  });
 
-    answerForm?.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      cardFront?.classList.remove('card__front_active');
-      cardBack?.classList.add('card__back_active');
-      document.addEventListener('keydown', nextCardOnEnterHandler);
-    });
+  answer.addEventListener('input', (evt) => {
+    if (answer.validity.patternMismatch) {
+      answer.dataset.errorMessage
+        ? answer.setCustomValidity(answer.dataset.errorMessage)
+        : null;
+    } else {
+      answer.setCustomValidity('');
+    }
+    if (!answer.validity.valid) {
+      errorSpan ? (errorSpan.textContent = answer.validationMessage) : null;
+      answer.classList.add('card__front-answer-input_error');
+    } else {
+      errorSpan ? (errorSpan.textContent = '') : null;
+      answer.classList.remove('card__front-answer-input_error');
+    }
+  });
 
-    cardNextBtn?.addEventListener('click', async (evt) => {
-      card.remove();
-      await displayNewCard();
-    });
-  }
+  cardNextBtn?.addEventListener('click', async (evt) => {
+    card.remove();
+    displayNewCard();
+  });
 };
 
 const prepareAudio = (cardElement: HTMLElement, cardData: CardData) => {
@@ -284,13 +294,22 @@ const renderCard = () => {
     });
 };
 
-// invocations;
-(async () => {
-  if (await checkToken('student', studentLoginPageURL)) {
-    try {
-      await displayNewCard();
-    } catch (error) {
-      console.log(error);
+// listeners
+// remove old card on enter if user looks at the back of the card
+document.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Enter') {
+    const card = document.querySelector('.card');
+    const cardBack = card?.querySelector('.card__back');
+    if (card && cardBack?.classList.contains('card__back_active')) {
+      card.remove();
+      displayNewCard();
     }
   }
-})();
+});
+
+// invocations;
+checkToken('student', studentLoginPageURL).then((res) => {
+  if (res) {
+    displayNewCard();
+  }
+});

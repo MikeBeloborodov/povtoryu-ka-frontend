@@ -42,14 +42,28 @@
   gap: 10px;
   inline-size: 100%;
   margin: 40px 0 0 0;
+  flex-direction: column;
 }
 
 .card__front-answer-input {
   font-size: 18px;
-  inline-size: 100%;
   block-size: 40px;
   border-radius: $general-border-radius;
   margin: 0 20px;
+  padding: 0 20px;
+}
+
+.card__front-answer-input:focus-visible {
+  outline: none;
+}
+
+.card__front-answer-input_error {
+  border: 1px solid red;
+}
+
+.card__front-answer-error {
+  display: block;
+  color: red;
   padding: 0 20px;
 }
 
