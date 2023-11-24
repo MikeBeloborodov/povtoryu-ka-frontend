@@ -1,0 +1,33 @@
+.loader {
+  position: absolute;
+  border: 7px solid #fff;
+  border-top: 7px solid #3498db;
+  border-radius: 50%;
+  inline-size: 50px;
+  block-size: 50px;
+  animation: spin 2s linear infinite;
+  inset-block-start: 40px;
+  inset-inline-start: calc(50% - 25px);
+  opacity: 1;
+  visibility: initial;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.5s ease;
+}
+
+.loader_invisible {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.5s ease;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

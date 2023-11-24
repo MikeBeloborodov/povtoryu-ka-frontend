@@ -1,7 +1,7 @@
 // functions
-const displayNewWordCard = () => {
+const displayReviewWordCard = () => {
   toggleLoader('.loader', 'loader_invisible');
-  getNewWordCard()
+  getReviewWordCard()
     .then((cardData) => {
       if (!cardData) {
         document.addEventListener('keydown', (evt) => {
@@ -9,19 +9,15 @@ const displayNewWordCard = () => {
             window.location.href = studentDashboardURL;
           }
         });
-        renderMessageContainer(
-          'Вы выучили все новые карточки!',
-          'Назад',
-          () => {
-            window.location.href = studentDashboardURL;
-          }
-        );
+        renderMessageContainer('Вы повторили все карточки!', 'Назад', () => {
+          window.location.href = studentDashboardURL;
+        });
         return;
       }
       const card = createCard(cardData);
       if (trainerSection && card) {
         trainerSection.append(card);
-        setCardTriggers(card, cardData, displayNewWordCard);
+        setCardTriggers(card, cardData, displayReviewWordCard);
       }
     })
     .catch((err) => {
@@ -40,7 +36,7 @@ document.addEventListener('keydown', (evt) => {
     const cardBack = card?.querySelector('.card__back');
     if (card && cardBack?.classList.contains('card__back_active')) {
       card.remove();
-      displayNewWordCard();
+      displayReviewWordCard();
     }
   }
 });
@@ -49,7 +45,7 @@ document.addEventListener('keydown', (evt) => {
 toggleLoader('.loader', 'loader_invisible');
 checkToken('student', studentLoginPageURL)
   .then(() => {
-    displayNewWordCard();
+    displayReviewWordCard();
   })
   .catch((err) => {
     console.log(err);

@@ -18,8 +18,44 @@ const apiGetStudentsURL = apiBaseURL + 'students';
 const apiSaveWordCard = apiBaseURL + 'cards/word/new';
 const apiGetStudentOwnData = apiBaseURL + 'student/own';
 const apiGetNewWordCard = apiBaseURL + 'cards/word/study/new';
+const apiGetReviewWordCard = apiBaseURL + 'cards/word/study/review';
+const apiAnswerWordCard = apiBaseURL + 'cards/word/study/answer';
+const apiReturnCardsCount = apiBaseURL + 'student/cardsCount';
+
+// selectors
+const messageSource: HTMLTemplateElement | null =
+  document.querySelector('#message-container');
+const messageTemplate = messageSource?.content;
 
 // functions
+const renderMessageContainer = (
+  message: string,
+  buttonText: string,
+  buttonCallback: Function
+) => {
+  const messageElement = messageTemplate
+    ?.querySelector('.message-container')
+    ?.cloneNode(true) as HTMLElement;
+
+  if (messageElement) {
+    const messageText = messageElement.querySelector(
+      '.message-container__text'
+    );
+    const messageButton = messageElement.querySelector(
+      '.message-container__button'
+    );
+
+    messageText ? (messageText.textContent = message) : null;
+    messageButton ? (messageButton.textContent = buttonText) : null;
+
+    messageButton?.addEventListener('click', () => {
+      buttonCallback();
+    });
+
+    document.body.append(messageElement);
+  }
+};
+
 const returnStudentData = async () => {
   const cookie = getCookie();
   let res;
@@ -43,7 +79,6 @@ const returnStudentData = async () => {
 };
 
 const checkTokenOnServer = async (token: string, entity: string) => {
-  let serverData: any;
   let response: any;
   switch (entity) {
     case 'student':
@@ -65,58 +100,48 @@ const checkTokenOnServer = async (token: string, entity: string) => {
       });
       break;
   }
-  serverData = await response.json();
-  if (response.status === 200) {
-    return serverData;
-  } else {
-    console.log(serverData);
-    return null;
+  if (!response.ok) {
+    return Promise.reject(`Error: ${response.status}`);
   }
+  return response.json();
 };
 
 const checkToken = async (entity: string, redirect_url: string) => {
   const cookie = getCookie();
-  let res: any;
   switch (entity) {
     case 'student':
       if (!cookie.studentToken) {
         setCookie('studentToken', '', -1);
         redirect_url ? (window.location.href = redirect_url) : null;
-        return false;
-      } else {
-        try {
-          res = await checkTokenOnServer(cookie.studentToken, entity);
-        } catch (error) {
-          console.log(error);
-        }
-        if (!res) {
-          setCookie('studentToken', '', -1);
-          setCookie('studentUserName', '', -1);
-          redirect_url ? (window.location.href = redirect_url) : null;
-          return false;
-        } else {
-          return true;
-        }
+        return Promise.reject('No token in cookies.');
       }
+      return checkTokenOnServer(cookie.studentToken, entity)
+        .then(() => {
+          return Promise.resolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          setCookie('studentToken', '', -1);
+          redirect_url ? (window.location.href = redirect_url) : null;
+          return Promise.reject('No such token on server.');
+        });
     case 'teacher':
       if (!cookie.teacherToken) {
         setCookie('teacherToken', '', -1);
         redirect_url ? (window.location.href = redirect_url) : null;
-        return false;
-      } else {
-        try {
-          res = await checkTokenOnServer(cookie.teacherToken, entity);
-        } catch (error) {
-          console.log(error);
-        }
-        if (!res) {
-          setCookie('teacherToken', '', -1);
-          redirect_url ? (window.location.href = redirect_url) : null;
-          return false;
-        } else {
-          return true;
-        }
+        return Promise.reject('No token in cookies.');
       }
+      return checkTokenOnServer(cookie.teacherToken, entity)
+        .then(() => {
+          return Promise.resolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          setCookie('studentToken', '', -1);
+          setCookie('studentUserName', '', -1);
+          redirect_url ? (window.location.href = redirect_url) : null;
+          return Promise.reject('No such token on server.');
+        });
   }
 };
 
@@ -162,8 +187,29 @@ const createRightClickMenu = (
   return menuBox;
 };
 
+const toggleLoader = (
+  loaderSelecltor: string,
+  loaderInvisibleClass: string
+) => {
+  const loader = document.querySelector(loaderSelecltor);
+  loader?.classList.toggle(loaderInvisibleClass);
+};
+
+const toggleContentVisibility = (
+  contentSelector: string,
+  contentInvisibleClass: string
+) => {
+  const content = document.querySelector(contentSelector);
+  content?.classList.toggle(contentInvisibleClass);
+};
+
 // Interfaces
 interface StudentData {
+  student: Student;
+  cardsCount: CardsCountData;
+}
+
+interface Student {
   id: number;
   nickname: string;
   userName: string;
@@ -196,6 +242,12 @@ interface studentOwnData {
   userName: string;
 }
 
+interface CardsCountData {
+  cardsAll: number;
+  cardsNew: number;
+  cardsToReview: number;
+}
+
 interface CardData {
   definition: string;
   id: number;
@@ -224,4 +276,9 @@ interface SentenceObject {
 interface TranslationObject {
   id: number;
   translation: string;
+}
+
+interface WordCardAnswer {
+  cardId: number;
+  answer: string;
 }

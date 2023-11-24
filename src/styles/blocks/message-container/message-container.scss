@@ -1,0 +1,17 @@
+@import '../../variables';
+
+.message-container {
+  position: absolute;
+  box-shadow: $general-box-shadow;
+  background-color: $general-background-color;
+  border-radius: $general-border-radius;
+  padding: 40px 30px;
+  inset-inline-start: 20px;
+  inset-inline-end: 20px;
+  inset-block-start: 80px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}

@@ -43,14 +43,16 @@
   inline-size: 100%;
   margin: 40px 0 0 0;
   flex-direction: column;
+  min-inline-size: 10px;
+  padding: 0 20px;
 }
 
 .card__front-answer-input {
   font-size: 18px;
   block-size: 40px;
   border-radius: $general-border-radius;
-  margin: 0 20px;
   padding: 0 20px;
+  inline-size: 100%;
 }
 
 .card__front-answer-input:focus-visible {
@@ -254,4 +256,27 @@
 
 .card__back-controls-forgot:hover {
   background-color: $accent-color-1-light;
+}
+
+.card__back-footer {
+  margin: 0 -20px -30px -20px;
+  text-align: center;
+  padding: 20px 0;
+  border-bottom-left-radius: $general-border-radius;
+  border-bottom-right-radius: $general-border-radius;
+}
+
+.card__back-footer-text {
+  color: $paragraph-white-color;
+  font-weight: bold;
+  font-size: 18px;
+  white-space: pre-wrap;
+}
+
+.card__back-footer_correct {
+  background-color: $accent-color-5;
+}
+
+.card__back-footer_incorrect {
+  background-color: $accent-color-1;
 }

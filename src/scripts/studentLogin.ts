@@ -2,12 +2,6 @@
 const loginUserBtn = document.querySelector('#login-btn');
 const regUserBtn = document.querySelector('#register-btn');
 
-// invocations;
-(async () => {
-  const res = await checkToken('student', '');
-  res ? (window.location.href = studentDashboardURL) : null;
-})();
-
 // event listeners
 regUserBtn?.addEventListener('click', (evt) => {
   evt.preventDefault();
@@ -51,3 +45,12 @@ loginUserBtn?.addEventListener('click', async (evt) => {
     console.log('error');
   }
 });
+
+// invocations;
+checkToken('student', '')
+  .then(() => {
+    window.location.href = studentDashboardURL;
+  })
+  .catch((err) => {
+    console.log(err);
+  });

@@ -97,7 +97,7 @@ const getStudentsData = async () => {
     return null;
   } else if (res.status === 200) {
     serverData = await res.json();
-    return serverData.studentsData;
+    return serverData;
   } else {
     throw new Error('Something wrong with the API.');
   }
@@ -111,7 +111,7 @@ const fillStudentsTable = async () => {
     throw error;
   }
   if (!studentsData) return;
-  studentsData.forEach((student: StudentData) => {
+  studentsData.forEach((item: StudentData) => {
     const studentElement = studentTemplate
       .querySelector('.students__item')
       ?.cloneNode(true) as HTMLLIElement;
@@ -130,16 +130,17 @@ const fillStudentsTable = async () => {
         '.sutdents__item-stats-all-cards'
       );
       newCardsSpan
-        ? (newCardsSpan.textContent = student.newCards.toString())
+        ? (newCardsSpan.textContent = item.cardsCount.cardsNew.toString())
         : null;
       reviewCardsSpan
-        ? (reviewCardsSpan.textContent = student.reviewCards.toString())
+        ? (reviewCardsSpan.textContent =
+            item.cardsCount.cardsToReview.toString())
         : null;
       allCardsSpan
-        ? (allCardsSpan.textContent = student.allCards.toString())
+        ? (allCardsSpan.textContent = item.cardsCount.cardsAll.toString())
         : null;
-      nameElement.textContent = student.nickname;
-      studentElement.id = student.id.toString();
+      nameElement.textContent = item.student.nickname;
+      studentElement.id = item.student.id.toString();
 
       // add menu
       const studentElementContainer = studentElement.querySelector(
@@ -162,7 +163,7 @@ const fillStudentsTable = async () => {
               'Удалить ученика',
               handler,
             ],
-            student.id
+            item.student.id
           );
           studentElement.append(menu);
 
@@ -378,12 +379,17 @@ newStudentBtn?.addEventListener('click', () => {
 });
 
 // invocations;
-(async () => {
-  if (await checkToken('teacher', teacherLoginPageURL)) {
-    try {
-      await fillStudentsTable();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-})();
+checkToken('teacher', teacherLoginPageURL)
+  .then(async () => {
+    toggleLoader('.loader', 'loader_invisible');
+    fillStudentsTable().finally(() => {
+      toggleLoader('.loader', 'loader_invisible');
+      toggleContentVisibility(
+        '.teacher-dashboard',
+        'teacher-dashboard_invisible'
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });

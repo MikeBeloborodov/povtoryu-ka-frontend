@@ -1,29 +1,73 @@
 const newCardsSpan = document.querySelector('#new-cards-amount');
 const reviewCardsSpan = document.querySelector('#review-cards-amount');
 const allCardsSpan = document.querySelector('#all-cards-amount');
+const newCardsTextSpan = document.querySelector('#new-cards-amount-text');
+const allCardsTextSpan = document.querySelector('#all-cards-amount-text');
+const reviewCardsTextSpan = document.querySelector('#review-cards-amount-text');
 
 // functions
-const loadCardsAmount = async (studentData: studentOwnData) => {
+const handleAmountSpanText = (spanElement: Element, amount: number) => {
+  const amountString = amount.toString();
+  const lastDigit = amountString[amountString.length - 1];
+  switch (lastDigit) {
+    case '1':
+      spanElement.textContent = 'карточка';
+      break;
+    case '2':
+    case '3':
+    case '4':
+      spanElement.textContent = 'карточки';
+      break;
+    default:
+      spanElement.textContent = 'карточек';
+      break;
+  }
+};
+
+const loadCardsAmount = (cardsCountData: CardsCountData) => {
   newCardsSpan
-    ? (newCardsSpan.textContent = studentData.newCards.toString())
+    ? (newCardsSpan.textContent = cardsCountData.cardsNew.toString())
     : null;
   reviewCardsSpan
-    ? (reviewCardsSpan.textContent = studentData.reviewCards.toString())
+    ? (reviewCardsSpan.textContent = cardsCountData.cardsToReview.toString())
     : null;
   allCardsSpan
-    ? (allCardsSpan.textContent = studentData.allCards.toString())
+    ? (allCardsSpan.textContent = cardsCountData.cardsAll.toString())
     : null;
+  if (allCardsTextSpan) {
+    handleAmountSpanText(allCardsTextSpan, cardsCountData.cardsAll);
+  }
+  if (newCardsTextSpan) {
+    handleAmountSpanText(newCardsTextSpan, cardsCountData.cardsNew);
+  }
+  if (reviewCardsTextSpan) {
+    handleAmountSpanText(reviewCardsTextSpan, cardsCountData.cardsToReview);
+  }
 };
 
 // invocations;
-(async () => {
-  if (await checkToken('student', studentLoginPageURL)) {
-    try {
-      const studentData = (await returnStudentData())
-        .studentData as studentOwnData;
-      loadCardsAmount(studentData);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-})();
+toggleLoader('.loader', 'loader_invisible');
+checkToken('student', studentLoginPageURL)
+  .then(() => {
+    toggleLoader('.loader', 'loader_invisible');
+    getCardsCount()
+      .then((cardsCountData: CardsCountData) => {
+        loadCardsAmount(cardsCountData);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        toggleLoader('.loader', 'loader_invisible');
+      });
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+  .finally(() => {
+    toggleLoader('.loader', 'loader_invisible');
+    toggleContentVisibility(
+      '.student-dashboard',
+      'student-dashboard_invisible'
+    );
+  });

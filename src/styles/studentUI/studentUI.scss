@@ -1,5 +1,19 @@
 @import '../variables';
 
+.student-dashboard {
+  transition:
+    opacity 0.5s ease,
+    visibility 0.3s ease;
+}
+
+.student-dashboard_invisible {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    visibility 0.3s ease;
+}
+
 .menu {
   margin: 0;
   background-color: $general-background-color;

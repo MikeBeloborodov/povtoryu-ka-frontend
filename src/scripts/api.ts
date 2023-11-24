@@ -1,10 +1,50 @@
-const getResponseData = (res: Response): Promise<CardData> => {
+const getResponseData = (res: Response) => {
+  if (res.status === 204) {
+    return Promise.resolve(null);
+  }
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
 };
 
-const getNewWordCard = async (): Promise<CardData> => {
+const getNewWordCard = async () => {
   const cookie = getCookie();
   return fetch(apiGetNewWordCard, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${cookie.studentToken}`,
+    },
+  }).then((res) => getResponseData(res));
+};
+
+const getReviewWordCard = async () => {
+  const cookie = getCookie();
+  return fetch(apiGetReviewWordCard, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${cookie.studentToken}`,
+    },
+  }).then((res) => getResponseData(res));
+};
+
+const sendWordCardAnswer = async (answer: WordCardAnswer) => {
+  const cookie = getCookie();
+  return fetch(apiAnswerWordCard, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${cookie.studentToken}`,
+    },
+    body: JSON.stringify({
+      cardId: answer.cardId,
+      answer: answer.answer,
+    }),
+  }).then((res) => getResponseData(res));
+};
+
+const getCardsCount = async () => {
+  const cookie = getCookie();
+  return fetch(apiReturnCardsCount, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

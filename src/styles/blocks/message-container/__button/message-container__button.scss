@@ -1,0 +1,20 @@
+@import '../../../variables';
+
+.message-container__button {
+  cursor: pointer;
+  display: block;
+  padding: 10px 10px;
+  border: none;
+  font-size: 16px;
+  border-radius: 10px;
+  color: $paragraph-white-color;
+  background-color: $accent-color-2;
+  font-weight: bold;
+  inline-size: 100px;
+  transition: background-color 0.3s ease;
+}
+
+.message-container__button:hover {
+  background-color: $accent-color-2-light;
+  transition: background-color 0.3s ease;
+}

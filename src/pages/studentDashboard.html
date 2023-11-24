@@ -11,7 +11,8 @@
     <link rel="apple-touch-icon" href="../favicons/mobile-icon.png" />
   </head>
   <body class="body">
-    <main>
+    <div class="loader loader_invisible"></div>
+    <main class="student-dashboard student-dashboard_invisible">
       <!--
         <header class="header">
         <a href="#" class="header__link">
@@ -27,18 +28,24 @@
                 <h3 class="menu__card-title">Новые карточки</h3>
                 <p class="menu__card-amount">
                   <span class="card_amount" id="new-cards-amount">0</span>
-                  карточек
+                  <span
+                    class="card_amount_text"
+                    id="new-cards-amount-text"
+                  ></span>
                 </p>
               </article>
             </a>
           </li>
           <li class="menu__item">
-            <a href="#0" class="menu__item-link">
+            <a href="/pages/reviewCards.html" class="menu__item-link">
               <article class="menu__card weak_cards">
                 <h3 class="menu__card-title">Повторить</h3>
                 <p class="menu__card-amount">
                   <span class="card_amount" id="review-cards-amount">0</span>
-                  карточек
+                  <span
+                    class="card_amount_text"
+                    id="review-cards-amount-text"
+                  ></span>
                 </p>
               </article>
             </a>
@@ -49,7 +56,10 @@
                 <h3 class="menu__card-title">Все карточки</h3>
                 <p class="menu__card-amount">
                   <span class="card_amount" id="all-cards-amount">0</span>
-                  карточек
+                  <span
+                    class="card_amount_text"
+                    id="all-cards-amount-text"
+                  ></span>
                 </p>
               </article>
             </a>
@@ -61,6 +71,7 @@
       <footer class="footer">&copy; 2023 MikeBeloborodov</footer>
     -->
     <script src="../scripts/utils.js" defer></script>
+    <script src="../scripts/api.js" defer></script>
     <script src="../scripts/studentDashboard.js" defer></script>
   </body>
 </html>
