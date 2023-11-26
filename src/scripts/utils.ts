@@ -16,11 +16,15 @@ const apiStudentLoginURL = apiBaseURL + 'student/login';
 const apiTeacherLoginURL = apiBaseURL + 'teacher/login';
 const apiGetStudentsURL = apiBaseURL + 'students';
 const apiSaveWordCard = apiBaseURL + 'cards/word/new';
+const apiSaveSentenceCard = apiBaseURL + 'cards/sentence/new';
 const apiGetStudentOwnData = apiBaseURL + 'student/own';
 const apiGetNewWordCard = apiBaseURL + 'cards/word/study/new';
+const apiGetNewSentenceCard = apiBaseURL + 'cards/sentence/study/new';
 const apiGetReviewWordCard = apiBaseURL + 'cards/word/study/review';
 const apiAnswerWordCard = apiBaseURL + 'cards/word/study/answer';
+const apiAnswerSentenceCard = apiBaseURL + 'cards/sentence/study/answer';
 const apiReturnCardsCount = apiBaseURL + 'student/cardsCount';
+const apiReturnCardAudio = apiBaseURL + 'cards/audio';
 
 // selectors
 const messageSource: HTMLTemplateElement | null =
@@ -203,6 +207,35 @@ const toggleContentVisibility = (
   content?.classList.toggle(contentInvisibleClass);
 };
 
+const handleAudio = (
+  isRecordingElement: HTMLSpanElement,
+  audioElement: HTMLAudioElement,
+  stopRecordingElement: HTMLButtonElement
+) => {
+  let audioChunks: any[] = [];
+  let rec: any;
+
+  isRecordingElement.textContent = 'Идёт запись...';
+
+  window.navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    rec = new MediaRecorder(stream);
+    rec.start();
+    rec.ondataavailable = (e: any) => {
+      audioChunks.push(e.data);
+      if (rec.state == 'inactive') {
+        let blob = new Blob(audioChunks, { type: 'audio/mp3' });
+        audioElement.src = URL.createObjectURL(blob);
+      }
+    };
+  });
+
+  stopRecordingElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    rec.stop();
+    isRecordingElement.textContent = 'Нажмите кнопку, чтобы прослушать';
+  });
+};
+
 // Interfaces
 interface StudentData {
   student: Student;
@@ -220,13 +253,23 @@ interface Student {
   allCards: number;
 }
 
-interface newCardForm extends HTMLFormControlsCollection {
+interface newWordCardForm extends HTMLFormControlsCollection {
   word: HTMLInputElement;
   pos: RadioNodeList;
   image: HTMLInputElement;
   sentence: HTMLTextAreaElement;
   definition: HTMLTextAreaElement;
   translation: HTMLInputElement;
+}
+
+interface newSentenceCardForm extends HTMLFormControlsCollection {
+  sentence: HTMLTextAreaElement;
+  word: HTMLInputElement;
+  answer: HTMLInputElement;
+  translation: HTMLTextAreaElement;
+  definition: HTMLTextAreaElement;
+  image: HTMLInputElement;
+  audio: HTMLAudioElement;
 }
 
 interface answerForm extends HTMLFormControlsCollection {
@@ -248,7 +291,7 @@ interface CardsCountData {
   cardsToReview: number;
 }
 
-interface CardData {
+interface WordCardData {
   definition: string;
   id: number;
   images: ImageObject[];
@@ -260,6 +303,21 @@ interface CardData {
   teacherId: number;
   translations: TranslationObject[];
   word: string;
+  audio: string;
+}
+
+interface SentenceCardData {
+  id: number;
+  sentence: string;
+  word: string;
+  answer: string;
+  definition: string;
+  image: string;
+  newCard: boolean;
+  pos: string;
+  sentenceTranslation: string;
+  studentId: number;
+  teacherId: number;
   audio: string;
 }
 

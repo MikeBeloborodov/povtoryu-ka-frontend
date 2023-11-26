@@ -19,6 +19,27 @@
   visibility: hidden;
 }
 
+.card__front-text-box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card__front-bold-text {
+  font-weight: bold;
+}
+
+.sentence-card__front-sentence {
+  font-size: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $accent-color-4;
+}
+
+.sentence-card__front-word {
+  font-size: 28px;
+  font-weight: bold;
+}
+
 .card__front_active {
   display: flex;
   flex-direction: column;
@@ -78,6 +99,10 @@
   inset: 0;
   z-index: -1;
   visibility: hidden;
+}
+
+.card__back-word-text {
+  font-weight: bold;
 }
 
 .card__back_active {
@@ -185,7 +210,7 @@
 
 .card__back-image {
   inline-size: max-content;
-  block-size: 100%;
+  block-size: 100px;
 }
 
 .card__back-next-image-btn {

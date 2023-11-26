@@ -1,9 +1,23 @@
 // functions
-const displayNewWordCard = () => {
+const displayNewCard = async () => {
   toggleLoader('.loader', 'loader_invisible');
-  getNewWordCard()
-    .then((cardData) => {
-      if (!cardData) {
+  try {
+    let cardData = await getNewWordCard();
+    if (cardData) {
+      const card = createWordCard(cardData);
+      if (trainerSection && card) {
+        trainerSection.append(card);
+        setWordCardTriggers(card, cardData, displayNewCard);
+      }
+    } else {
+      cardData = await getNewSentenceCard();
+      if (cardData) {
+        const card = createSentenceCard(cardData);
+        if (trainerSection && card) {
+          trainerSection.append(card);
+          setSentenceCardTriggers(card, cardData, displayNewCard);
+        }
+      } else {
         document.addEventListener('keydown', (evt) => {
           if (evt.key === 'Enter') {
             window.location.href = studentDashboardURL;
@@ -18,18 +32,13 @@ const displayNewWordCard = () => {
         );
         return;
       }
-      const card = createCard(cardData);
-      if (trainerSection && card) {
-        trainerSection.append(card);
-        setCardTriggers(card, cardData, displayNewWordCard);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      toggleLoader('.loader', 'loader_invisible');
-    });
+    }
+  } catch (error) {
+    console.log(error);
+    alert(error);
+  } finally {
+    toggleLoader('.loader', 'loader_invisible');
+  }
 };
 
 // listeners
@@ -40,7 +49,7 @@ document.addEventListener('keydown', (evt) => {
     const cardBack = card?.querySelector('.card__back');
     if (card && cardBack?.classList.contains('card__back_active')) {
       card.remove();
-      displayNewWordCard();
+      displayNewCard();
     }
   }
 });
@@ -49,7 +58,7 @@ document.addEventListener('keydown', (evt) => {
 toggleLoader('.loader', 'loader_invisible');
 checkToken('student', studentLoginPageURL)
   .then(() => {
-    displayNewWordCard();
+    displayNewCard();
   })
   .catch((err) => {
     console.log(err);

@@ -1,12 +1,16 @@
 // selectors
-const cardSource: HTMLTemplateElement | null = document.querySelector('#card');
-const cardTemplate = cardSource?.content;
+const wordCardSource: HTMLTemplateElement | null =
+  document.querySelector('#word-card');
+const sentenceCardSource: HTMLTemplateElement | null =
+  document.querySelector('#sentence-card');
+const wordCardTemplate = wordCardSource?.content;
+const sentenceCardTemplate = sentenceCardSource?.content;
 const trainerSection = document.querySelector('.trainer');
 
 // functions
-const setCardTriggers = async (
+const setWordCardTriggers = async (
   card: HTMLElement,
-  cardData: CardData,
+  cardData: WordCardData,
   nextCardCallback: Function
 ) => {
   const cardFront = card.querySelector('.card__front');
@@ -79,19 +83,177 @@ const setCardTriggers = async (
   });
 };
 
-const prepareAudio = (cardElement: HTMLElement, cardData: CardData) => {
+const setSentenceCardTriggers = async (
+  card: HTMLElement,
+  cardData: SentenceCardData,
+  nextCardCallback: Function
+) => {
+  const cardFront = card.querySelector('.card__front');
+  const cardBack = card.querySelector('.card__back');
+  const cardNextBtn = card.querySelector('.card__back-controls-next');
+  const answerForm = document.forms.namedItem('answer');
+  const cardFooter = card.querySelector('.card__back-footer');
+  const cardFooterText = cardFooter?.querySelector('.card__back-footer-text');
+  const errorSpan = answerForm?.querySelector('.card__front-answer-error');
+  const elements = answerForm?.elements as answerForm;
+  const answer = elements.answer;
+  answer.focus();
+
+  answerForm?.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (card.dataset.cardId) {
+      toggleLoader('.loader', 'loader_invisible');
+      sendSentenceCardAnswer({
+        cardId: parseInt(card.dataset.cardId),
+        answer: answer.value,
+      })
+        .then((res) => {
+          cardFront?.classList.remove('card__front_active');
+          cardBack?.classList.add('card__back_active');
+          if (res.isCorrect) {
+            cardFooter?.classList.add('card__back-footer_correct');
+            cardFooterText ? (cardFooterText.textContent = 'Правильно!') : null;
+          } else {
+            cardFooter?.classList.add('card__back-footer_incorrect');
+            cardFooterText
+              ? (cardFooterText.textContent = `Неверно.\nВаш ответ: ${answer.value}.\nПравильный ответ: ${cardData.answer}.`)
+              : null;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          toggleLoader('.loader', 'loader_invisible');
+        });
+    }
+  });
+
+  // input validation
+  answer.addEventListener('input', (evt) => {
+    if (answer.validity.patternMismatch) {
+      answer.dataset.errorMessage
+        ? answer.setCustomValidity(answer.dataset.errorMessage)
+        : null;
+    } else {
+      answer.setCustomValidity('');
+    }
+    if (!answer.validity.valid) {
+      errorSpan ? (errorSpan.textContent = answer.validationMessage) : null;
+      answer.classList.add('card__front-answer-input_error');
+    } else {
+      errorSpan ? (errorSpan.textContent = '') : null;
+      answer.classList.remove('card__front-answer-input_error');
+    }
+  });
+
+  cardNextBtn?.addEventListener('click', async (evt) => {
+    card.remove();
+    nextCardCallback();
+  });
+};
+
+const prepareAudio = (cardElement: HTMLElement, cardData: WordCardData) => {
   const cardAudio = cardElement.querySelector(
     '.card__back-audio'
   ) as HTMLAudioElement;
   if (!cardData.audio) cardAudio.remove();
   cardAudio ? (cardAudio.src = cardData.audio) : null;
 };
-const prepareWord = (cardElement: HTMLElement, cardData: CardData) => {
+
+const prepareFrontSentenceCard = (
+  cardElement: HTMLElement,
+  cardData: SentenceCardData
+) => {
+  // sentence
+  const cardSentence = cardElement.querySelector(
+    '.sentence-card__front-sentence'
+  );
+  const sentence =
+    cardData.sentence[0].toUpperCase() + cardData.sentence.slice(1);
+  const regex = /\*.*\*/;
+  const searchResult = sentence.match(regex);
+  let searchString;
+  let index;
+  let formatedSentence;
+  if (searchResult) {
+    searchString = searchResult[0];
+    index = searchResult.index;
+    if (index) {
+      formatedSentence =
+        sentence.slice(0, index) +
+        '<span class="card__front-bold-text">' +
+        searchString.replace(/\*/g, '') +
+        '</span>' +
+        sentence.slice(index + searchString.length);
+      cardSentence ? (cardSentence.innerHTML = formatedSentence) : null;
+    }
+  } else {
+    cardSentence ? (cardSentence.textContent = sentence) : null;
+  }
+
+  // word
+  const cardWord = cardElement.querySelector('.sentence-card__front-word');
+  cardWord ? (cardWord.textContent = cardData.word.toLowerCase()) : null;
+};
+
+const prepareBackSentenceCard = async (
+  cardElement: HTMLElement,
+  cardData: SentenceCardData
+) => {
+  // sentence
+  const cardSentence = cardElement.querySelector('.card__back-sentence-text');
+  const sentence =
+    cardData.sentence[0].toUpperCase() + cardData.sentence.slice(1);
+  cardSentence ? (cardSentence.textContent = sentence) : null;
+
+  // translation
+  const cardTranslation = cardElement.querySelector(
+    '.card__back-translation-text'
+  );
+  const translation =
+    cardData.sentenceTranslation[0].toUpperCase() +
+    cardData.sentenceTranslation.slice(1);
+  cardTranslation ? (cardTranslation.textContent = translation) : null;
+
+  // word
+  const cardWord = cardElement.querySelector('.card__back-word-text');
+  cardWord ? (cardWord.textContent = cardData.word) : null;
+
+  // definition
+  const cardDefinition = cardElement.querySelector(
+    '.card__back-definition-text'
+  );
+  cardDefinition ? (cardDefinition.textContent = cardData.definition) : null;
+
+  // answer
+  const cardAnswer = cardElement.querySelector('.card__back-answer-text');
+  cardAnswer ? (cardAnswer.textContent = cardData.answer) : null;
+
+  // image
+  const cardImage = cardElement.querySelector(
+    '.card__back-image'
+  ) as HTMLImageElement;
+  cardImage ? (cardImage.src = cardData.image) : null;
+
+  // audio
+  const cardAudio = cardElement.querySelector(
+    '.card__audio'
+  ) as HTMLAudioElement;
+  const audioBlob = await getCardAudio(cardData.audio);
+  cardAudio ? (cardAudio.src = URL.createObjectURL(audioBlob)) : null;
+  cardAudio.play();
+};
+
+const prepareWord = (cardElement: HTMLElement, cardData: WordCardData) => {
   const cardWord = cardElement.querySelector('.card__front-word');
   cardWord ? (cardWord.textContent = cardData.word.toLowerCase()) : null;
 };
 
-const prepareDefinition = (cardElement: HTMLElement, cardData: CardData) => {
+const prepareDefinition = (
+  cardElement: HTMLElement,
+  cardData: WordCardData
+) => {
   const definitionContainer = cardElement.querySelector(
     '.card__back-definition'
   );
@@ -106,7 +268,7 @@ const prepareDefinition = (cardElement: HTMLElement, cardData: CardData) => {
   }
 };
 
-const prepareSentences = (cardElement: HTMLElement, cardData: CardData) => {
+const prepareSentences = (cardElement: HTMLElement, cardData: WordCardData) => {
   const sentencesContainer = cardElement.querySelector(
     '.card__back-sentences-container'
   );
@@ -161,7 +323,7 @@ const createImageModal = (image_data: ImageObject) => {
   return modal;
 };
 
-const prepareImages = (cardElement: HTMLElement, cardData: CardData) => {
+const prepareImages = (cardElement: HTMLElement, cardData: WordCardData) => {
   const imagesContainer = cardElement.querySelector(
     '.card__back-images-container'
   );
@@ -191,7 +353,10 @@ const prepareImages = (cardElement: HTMLElement, cardData: CardData) => {
   imageListItemOriginal ? imageListItemOriginal.remove() : null;
 };
 
-const prepareTranslations = (cardElement: HTMLElement, cardData: CardData) => {
+const prepareTranslations = (
+  cardElement: HTMLElement,
+  cardData: WordCardData
+) => {
   const translationsContainer = cardElement.querySelector(
     '.card__back-translations-container'
   );
@@ -219,7 +384,7 @@ const prepareTranslations = (cardElement: HTMLElement, cardData: CardData) => {
   translationListItemOriginal ? translationListItemOriginal.remove() : null;
 };
 
-const prepareButtons = (cardElement: HTMLElement, cardData: CardData) => {
+const prepareButtons = (cardElement: HTMLElement, cardData: WordCardData) => {
   // buttons
   const nextSentenceBtn = cardElement.querySelector(
     '.card__back-next-sentence-btn'
@@ -280,8 +445,8 @@ const prepareButtons = (cardElement: HTMLElement, cardData: CardData) => {
   });
 };
 
-const createCard = (cardData: CardData) => {
-  const cardElement = cardTemplate
+const createWordCard = (cardData: WordCardData) => {
+  const cardElement = wordCardTemplate
     ?.querySelector('.card')
     ?.cloneNode(true) as HTMLElement;
 
@@ -300,6 +465,22 @@ const createCard = (cardData: CardData) => {
     prepareButtons(cardElement, cardData);
 
     prepareAudio(cardElement, cardData);
+
+    cardElement.dataset.cardId = cardData.id.toString();
+
+    return cardElement;
+  }
+};
+
+const createSentenceCard = (cardData: SentenceCardData) => {
+  const cardElement = sentenceCardTemplate
+    ?.querySelector('.card')
+    ?.cloneNode(true) as HTMLElement;
+
+  if (cardElement) {
+    prepareFrontSentenceCard(cardElement, cardData);
+
+    prepareBackSentenceCard(cardElement, cardData);
 
     cardElement.dataset.cardId = cardData.id.toString();
 

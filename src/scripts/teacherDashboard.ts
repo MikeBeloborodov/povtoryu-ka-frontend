@@ -154,8 +154,10 @@ const fillStudentsTable = async () => {
           };
           const menu = createRightClickMenu(
             [
-              'Создать карточку',
-              newCardModal,
+              'Создать карточку слова',
+              newWordCardModal,
+              'Создать карточку предложения',
+              newSentenceCardModal,
               'Посмотреть карточки',
               handler,
               'Статистика',
@@ -194,7 +196,7 @@ const fillStudentsTable = async () => {
   });
 };
 
-const newCardModal = (studentId: number) => {
+const newWordCardModal = (studentId: number) => {
   // close menu
   const closeModal = document.querySelector('.close-right-click-menu-modal');
   const menu = document.querySelector('.right-click-list');
@@ -333,9 +335,147 @@ const newCardModal = (studentId: number) => {
   }
 };
 
+const newSentenceCardModal = (studentId: number) => {
+  // close menu
+  const closeModal = document.querySelector('.close-right-click-menu-modal');
+  const menu = document.querySelector('.right-click-list');
+  if (closeModal && menu) {
+    closeModal.remove();
+    menu.remove();
+  }
+
+  // modal container logic
+  const modalContainer = modalTemplate
+    ?.querySelector('.modal__container')
+    ?.cloneNode(true) as HTMLElement;
+  const modal = modalContainer.querySelector('.modal');
+
+  if (modalContainer && modal) {
+    // elements
+    const newCardForm = document.createElement('form');
+    const inputSentence = document.createElement('textarea');
+    const labelSentence = document.createElement('label');
+    const inputWord = document.createElement('input');
+    const labelWord = document.createElement('label');
+    const inputAnswer = document.createElement('input');
+    const labelAnswer = document.createElement('label');
+    const inputTranslation = document.createElement('textarea');
+    const labelTranslation = document.createElement('label');
+    const inputImage = document.createElement('input');
+    const labelImage = document.createElement('label');
+    const inputDefinition = document.createElement('textarea');
+    const labelDefinition = document.createElement('label');
+    const audioBox = document.createElement('div');
+    const startRecordingButton = document.createElement('button');
+    const stopRecordingButton = document.createElement('button');
+    const audio = document.createElement('audio');
+    const isRecordingSpan = document.createElement('span');
+    const sendButton = document.createElement('button');
+
+    // sentence
+    inputSentence.name = 'sentence';
+    inputSentence.id = 'sentence';
+    inputSentence.rows = 5;
+    inputSentence.cols = 33;
+    labelSentence.htmlFor = 'sentence';
+    labelSentence.textContent = 'Введите предложение:';
+
+    // word
+    inputWord.type = 'text';
+    inputWord.name = 'word';
+    inputWord.id = 'word';
+    labelWord.htmlFor = 'word';
+    labelWord.textContent = 'Ключевое слово: ';
+
+    // answer
+    inputAnswer.type = 'text';
+    inputAnswer.name = 'answer';
+    inputAnswer.id = 'answer';
+    labelAnswer.htmlFor = 'answer';
+    labelAnswer.textContent = 'Правильный ответ: ';
+
+    // translation
+    inputTranslation.name = 'translation';
+    inputTranslation.id = 'translation';
+    inputTranslation.rows = 5;
+    inputTranslation.cols = 33;
+    labelTranslation.htmlFor = 'translation';
+    labelTranslation.textContent = 'Перевод предложения: ';
+
+    // definition
+    inputDefinition.name = 'definition';
+    inputDefinition.id = 'definition';
+    inputDefinition.rows = 5;
+    inputDefinition.cols = 33;
+    labelDefinition.htmlFor = 'definition';
+    labelDefinition.textContent = 'Определение:';
+
+    // image
+    inputImage.type = 'text';
+    inputImage.id = 'image';
+    inputImage.name = 'image';
+    labelImage.htmlFor = 'image';
+    labelImage.textContent = 'Ссылка на картинку: ';
+
+    // audio
+    startRecordingButton.textContent = 'Запись';
+    stopRecordingButton.textContent = 'Стоп';
+    audio.controls = true;
+    audio.id = 'audio';
+    isRecordingSpan.textContent = "Нажмите 'Запись', чтобы записать аудио.";
+    startRecordingButton.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      handleAudio(isRecordingSpan, audio, stopRecordingButton);
+    });
+    audioBox.append(startRecordingButton);
+    audioBox.append(stopRecordingButton);
+    audioBox.append(isRecordingSpan);
+    audioBox.append(audio);
+
+    // submit button
+    sendButton.textContent = 'Отправить';
+    sendButton.addEventListener('click', async (evt) => {
+      evt.preventDefault();
+      try {
+        await sendNewSentenceCard(studentId);
+        location.reload();
+      } catch (error) {
+        alert(error);
+      }
+    });
+
+    // form construction
+    newCardForm.name = 'newSentenceCardForm';
+    newCardForm.append(labelSentence);
+    newCardForm.append(inputSentence);
+    newCardForm.append(labelWord);
+    newCardForm.append(inputWord);
+    newCardForm.append(labelAnswer);
+    newCardForm.append(inputAnswer);
+    newCardForm.append(labelTranslation);
+    newCardForm.append(inputTranslation);
+    newCardForm.append(labelDefinition);
+    newCardForm.append(inputDefinition);
+    newCardForm.append(labelImage);
+    newCardForm.append(inputImage);
+    newCardForm.append(audioBox);
+    newCardForm.append(sendButton);
+
+    // modal removal
+    const modalBackdrop = modalContainer.querySelector('.modal__backdrop');
+    modalBackdrop?.addEventListener('click', () => {
+      modalContainer.remove();
+    });
+
+    // append
+    modal.append(newCardForm);
+    document.body.append(modalContainer);
+  }
+};
+
 const sendNewCard = async (studentId: number) => {
   const cardForm = document.forms.namedItem('newCardForm');
-  const elements = cardForm?.elements as newCardForm;
+  const elements = cardForm?.elements as newWordCardForm;
   const data = {
     word: elements.word.value,
     partOfSpeech: elements.pos.value,
@@ -364,6 +504,39 @@ const sendNewCard = async (studentId: number) => {
         Authorization: `Bearer ${cookie.teacherToken}`,
       },
       body: payload,
+    });
+    const jsonRes = await res.json();
+    console.log(jsonRes);
+  } catch (error) {
+    console.log(error);
+    throw new Error('Ошибка сервера.');
+  }
+};
+
+const sendNewSentenceCard = async (studentId: number) => {
+  const cardForm = document.forms.namedItem('newSentenceCardForm');
+  const elements = cardForm?.elements as newSentenceCardForm;
+  const audio = document.querySelector('#audio') as HTMLAudioElement;
+  const audioBlob = await fetch(audio.src).then((res) => res.blob());
+  const formData = new FormData();
+  formData.append('sentence', elements.sentence.value);
+  formData.append('word', elements.word.value);
+  formData.append('answer', elements.answer.value);
+  formData.append('sentenceTranslation', elements.translation.value);
+  formData.append('pos', 'noun');
+  formData.append('definition', elements.definition.value);
+  formData.append('image', elements.image.value);
+  formData.append('audio', audioBlob);
+  formData.append('studentId', studentId.toString());
+
+  const cookie = getCookie();
+  try {
+    const res = await fetch(apiSaveSentenceCard, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${cookie.teacherToken}`,
+      },
+      body: formData,
     });
     const jsonRes = await res.json();
     console.log(jsonRes);

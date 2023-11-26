@@ -14,10 +14,10 @@ const displayReviewWordCard = () => {
         });
         return;
       }
-      const card = createCard(cardData);
+      const card = createWordCard(cardData);
       if (trainerSection && card) {
         trainerSection.append(card);
-        setCardTriggers(card, cardData, displayReviewWordCard);
+        setWordCardTriggers(card, cardData, displayReviewWordCard);
       }
     })
     .catch((err) => {

@@ -24,8 +24,8 @@
     <script src="../scripts/cardsLogic.js" defer></script>
     <script src="../scripts/card.js" defer></script>
 
-    <!-- Card template -->
-    <template id="card">
+    <!-- Word card template -->
+    <template id="word-card">
       <article class="card">
         <section class="card__front card__front_active">
           <h2 class="card__front-title visually-hidden">Перед карточки</h2>
@@ -87,10 +87,75 @@
           </section>
           <section class="card__back-audio">
             <audio controls>
-              <source
-                src="https://media.merriam-webster.com/audio/prons/en/us/mp3/w/work0001.mp3"
-                type="audio/mpeg"
-              />
+              <source type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </section>
+          <section class="card__back-controls">
+            <button
+              class="card__back-controls-next card-control-btn"
+              id="next-btn"
+            >
+              Продолжить
+            </button>
+          </section>
+          <footer class="card__back-footer">
+            <p class="card__back-footer-text"></p>
+          </footer>
+        </section>
+      </article>
+    </template>
+    <!-- Sentence card template -->
+    <template id="sentence-card">
+      <article class="card">
+        <section class="card__front card__front_active">
+          <h2 class="card__front-title visually-hidden">Перед карточки</h2>
+          <button class="card__front-button">
+            <div class="card__front-text-box">
+              <span class="sentence-card__front-sentence"></span>
+              <span class="sentence-card__front-word"></span>
+            </div>
+          </button>
+          <form class="card__front-answer-form" name="answer">
+            <input
+              class="card__front-answer-input"
+              id="answer"
+              type="text"
+              placeholder="Перевод слова"
+              autocomplete="off"
+              required
+              minlength="1"
+              maxlength="40"
+              pattern="[а-яА-яёЁ\s\-]+$"
+              data-error-message="Разрешены только кириллические буквы, знаки дефиса и пробелы"
+            />
+            <span class="card__front-answer-error"></span>
+          </form>
+        </section>
+        <section class="card__back">
+          <h2 class="card__back-title visually-hidden">Оборот карточки</h2>
+          <section class="card__back-sentence">
+            <h3 class="card__back-sentence-title card__title">Предложение:</h3>
+            <p class="card__back-sentence-text"></p>
+            <p class="card__back-translation-text"></p>
+          </section>
+          <section class="card__back-word">
+            <h3 class="card__back-word-title card__title">Слово:</h3>
+            <p class="card__back-word-text"></p>
+          </section>
+          <section class="card__back-definition">
+            <h3 class="card__back-answer-title card__title">
+              Правильный ответ:
+            </h3>
+            <p class="card__back-answer-text"></p>
+          </section>
+          <section class="card__back-images">
+            <h3 class="card__back-images-title card__title">Картинка:</h3>
+            <img src="" alt="" class="card__back-image" />
+          </section>
+          <section class="card__back-audio">
+            <audio class="card__audio" controls>
+              <source type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
           </section>

@@ -2,8 +2,8 @@
 const submitFormBtn = document.querySelector('#submit-form');
 
 // functions
-const renderCardTest = (serverData: CardData[]) => {
-  const card = createCard(serverData[0]);
+const renderCardTest = (serverData: WordCardData[]) => {
+  const card = createWordCard(serverData[0]);
   if (trainerSection && card) {
     trainerSection.append(card);
   }
