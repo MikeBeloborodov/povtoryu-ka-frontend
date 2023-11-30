@@ -1,0 +1,11 @@
+@import '../../../../variables.scss';
+
+.auth-container__button_accent-color-2 {
+  background-color: $accent-color-2;
+  transition: background-color 0.3s ease;
+}
+
+.auth-container__button_accent-color-2:hover {
+  background-color: $accent-color-2-light;
+  transition: background-color 0.3s ease;
+}

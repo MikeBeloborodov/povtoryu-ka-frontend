@@ -12,7 +12,7 @@
   </head>
   <body class="body">
     <div class="loader loader_invisible"></div>
-    <main class="student-dashboard student-dashboard_invisible">
+    <main class="student-dashboard__main student-dashboard__main_invisible">
       <!--
         <header class="header">
         <a href="#" class="header__link">
@@ -20,44 +20,68 @@
         </a>
         </header>
       -->
-      <section class="content">
-        <ul class="menu">
-          <li class="menu__item">
-            <a href="/pages/newCards.html" class="menu__item-link">
-              <article class="menu__card new_cards">
-                <h3 class="menu__card-title">Новые карточки</h3>
-                <p class="menu__card-amount">
-                  <span class="card_amount" id="new-cards-amount">0</span>
+      <section class="student-dashboard">
+        <ul class="student-dashboard__menu">
+          <li class="student-dashboard__menu-item">
+            <a
+              href="/pages/newCards.html"
+              class="student-dashboard__menu-item-link"
+            >
+              <article
+                class="student-dashboard__menu-card student-dashboard__menu-card_all-cards"
+              >
+                <h3 class="student-dashboard__menu-card-title">
+                  Новые карточки
+                </h3>
+                <p class="student-dashboard__menu-card-amount">
                   <span
-                    class="card_amount_text"
+                    class="student-dashboard__menu-card-amount-number"
+                    id="new-cards-amount"
+                    >0</span
+                  >
+                  <span
+                    class="student-dashboard__menu-card-amount-text"
                     id="new-cards-amount-text"
                   ></span>
                 </p>
               </article>
             </a>
           </li>
-          <li class="menu__item">
-            <a href="/pages/reviewCards.html" class="menu__item-link">
-              <article class="menu__card weak_cards">
-                <h3 class="menu__card-title">Повторить</h3>
-                <p class="menu__card-amount">
-                  <span class="card_amount" id="review-cards-amount">0</span>
+          <li class="student-dashboard__menu-item">
+            <a
+              href="/pages/reviewCards.html"
+              class="student-dashboard__menu-item-link"
+            >
+              <article
+                class="student-dashboard__menu-card student-dashboard__menu-card_review-cards"
+              >
+                <h3 class="student-dashboard__menu-card-title">Повторить</h3>
+                <p class="student-dashboard__menu-card-amount">
                   <span
-                    class="card_amount_text"
+                    class="student-dashboard__menu-card-amount-number"
+                    id="review-cards-amount"
+                    >0</span
+                  >
+                  <span
+                    class="student-dashboard__menu-card-amount-text"
                     id="review-cards-amount-text"
                   ></span>
                 </p>
               </article>
             </a>
           </li>
-          <li class="menu__item">
-            <a href="#0" class="menu__item-link">
-              <article class="menu__card all_cards">
-                <h3 class="menu__card-title">Все карточки</h3>
-                <p class="menu__card-amount">
-                  <span class="card_amount" id="all-cards-amount">0</span>
+          <li class="student-dashboard__menu-item">
+            <a href="#0" class="student-dashboard__menu-item-link">
+              <article class="student-dashboard__menu-card all_cards">
+                <h3 class="student-dashboard__menu-card-title">Все карточки</h3>
+                <p class="student-dashboard__menu-card-amount">
                   <span
-                    class="card_amount_text"
+                    class="student-dashboard__menu-card-amount-number"
+                    id="all-cards-amount"
+                    >0</span
+                  >
+                  <span
+                    class="student-dashboard__menu-card-amount-text"
                     id="all-cards-amount-text"
                   ></span>
                 </p>

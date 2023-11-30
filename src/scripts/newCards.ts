@@ -1,6 +1,6 @@
 // functions
 const displayNewCard = async () => {
-  toggleLoader('.loader', 'loader_invisible');
+  toggleLoader();
   try {
     let cardData = await getNewWordCard();
     if (cardData) {
@@ -37,7 +37,7 @@ const displayNewCard = async () => {
     console.log(error);
     alert(error);
   } finally {
-    toggleLoader('.loader', 'loader_invisible');
+    toggleLoader();
   }
 };
 
@@ -54,8 +54,8 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
-// invocations;
-toggleLoader('.loader', 'loader_invisible');
+// function calls
+toggleLoader();
 checkToken('student', studentLoginPageURL)
   .then(() => {
     displayNewCard();
@@ -64,5 +64,5 @@ checkToken('student', studentLoginPageURL)
     console.log(err);
   })
   .finally(() => {
-    toggleLoader('.loader', 'loader_invisible');
+    toggleLoader();
   });

@@ -1,31 +1,44 @@
 // functions
-const displayReviewWordCard = () => {
-  toggleLoader('.loader', 'loader_invisible');
-  getReviewWordCard()
-    .then((cardData) => {
-      if (!cardData) {
+const displayReviewCard = async () => {
+  toggleLoader();
+  try {
+    let cardData = await getReviewWordCard();
+    if (cardData) {
+      const card = createWordCard(cardData);
+      if (trainerSection && card) {
+        trainerSection.append(card);
+        setWordCardTriggers(card, cardData, displayReviewCard);
+      }
+    } else {
+      cardData = await getReviewSentenceCard();
+      if (cardData) {
+        const card = createSentenceCard(cardData);
+        if (trainerSection && card) {
+          trainerSection.append(card);
+          setSentenceCardTriggers(card, cardData, displayReviewCard);
+        }
+      } else {
         document.addEventListener('keydown', (evt) => {
           if (evt.key === 'Enter') {
             window.location.href = studentDashboardURL;
           }
         });
-        renderMessageContainer('Вы повторили все карточки!', 'Назад', () => {
-          window.location.href = studentDashboardURL;
-        });
+        renderMessageContainer(
+          'Вы выучили все новые карточки!',
+          'Назад',
+          () => {
+            window.location.href = studentDashboardURL;
+          }
+        );
         return;
       }
-      const card = createWordCard(cardData);
-      if (trainerSection && card) {
-        trainerSection.append(card);
-        setWordCardTriggers(card, cardData, displayReviewWordCard);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      toggleLoader('.loader', 'loader_invisible');
-    });
+    }
+  } catch (error) {
+    console.log(error);
+    alert(error);
+  } finally {
+    toggleLoader();
+  }
 };
 
 // listeners
@@ -36,20 +49,20 @@ document.addEventListener('keydown', (evt) => {
     const cardBack = card?.querySelector('.card__back');
     if (card && cardBack?.classList.contains('card__back_active')) {
       card.remove();
-      displayReviewWordCard();
+      displayReviewCard();
     }
   }
 });
 
-// invocations;
-toggleLoader('.loader', 'loader_invisible');
+// function calls
+toggleLoader();
 checkToken('student', studentLoginPageURL)
   .then(() => {
-    displayReviewWordCard();
+    displayReviewCard();
   })
   .catch((err) => {
     console.log(err);
   })
   .finally(() => {
-    toggleLoader('.loader', 'loader_invisible');
+    toggleLoader();
   });

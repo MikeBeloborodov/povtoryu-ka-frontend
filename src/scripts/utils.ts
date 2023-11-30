@@ -21,6 +21,7 @@ const apiGetStudentOwnData = apiBaseURL + 'student/own';
 const apiGetNewWordCard = apiBaseURL + 'cards/word/study/new';
 const apiGetNewSentenceCard = apiBaseURL + 'cards/sentence/study/new';
 const apiGetReviewWordCard = apiBaseURL + 'cards/word/study/review';
+const apiGetReviewSentenceCard = apiBaseURL + 'cards/sentence/study/review';
 const apiAnswerWordCard = apiBaseURL + 'cards/word/study/answer';
 const apiAnswerSentenceCard = apiBaseURL + 'cards/sentence/study/answer';
 const apiReturnCardsCount = apiBaseURL + 'student/cardsCount';
@@ -30,6 +31,7 @@ const apiReturnCardAudio = apiBaseURL + 'cards/audio';
 const messageSource: HTMLTemplateElement | null =
   document.querySelector('#message-container');
 const messageTemplate = messageSource?.content;
+const popupCloseButton = document.querySelector('.popup__close');
 
 // functions
 const renderMessageContainer = (
@@ -191,12 +193,9 @@ const createRightClickMenu = (
   return menuBox;
 };
 
-const toggleLoader = (
-  loaderSelecltor: string,
-  loaderInvisibleClass: string
-) => {
-  const loader = document.querySelector(loaderSelecltor);
-  loader?.classList.toggle(loaderInvisibleClass);
+const toggleLoader = () => {
+  const loader = document.querySelector('.loader');
+  loader?.classList.toggle('loader_invisible');
 };
 
 const toggleContentVisibility = (
@@ -236,6 +235,54 @@ const handleAudio = (
   });
 };
 
+const openPopup = (status: string, message: string) => {
+  const popup = document.querySelector('.popup');
+  const popupMessage = popup?.querySelector('.popup__message');
+  if (popup && popupMessage) {
+    popup.classList.add(`popup_${status}`);
+    popupMessage.textContent = message;
+    popup.classList.add('popup_visible');
+  }
+};
+
+const closePopup = () => {
+  const popup = document.querySelector('.popup');
+  if (popup) {
+    popup.classList.remove('popup_visible');
+    popup.classList.remove('popup_success');
+    popup.classList.remove('popup_error');
+  }
+};
+
+const sleep = async (ms: number) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms);
+  });
+};
+
+const handleError = (error: number) => {
+  switch (error) {
+    case 400:
+      openPopup('error', 'Ошибка в формате данных, попробуйте еще раз.');
+      break;
+    case 403:
+      openPopup('error', 'Введенный пароль или код не верны.');
+      break;
+    case 404:
+      openPopup('error', 'Такой пользователь не зарегистрирован.');
+      break;
+    case 409:
+      openPopup('error', 'Такой пользователь уже зарегистрирован.');
+      break;
+    case 500:
+      openPopup('error', 'Ошибка сервера. Обратитесь к админу.');
+      break;
+    default:
+      openPopup('error', `Ошибка ${error}, обратитесь к админу.`);
+      break;
+  }
+};
+
 // Interfaces
 interface StudentData {
   student: Student;
@@ -266,6 +313,7 @@ interface newSentenceCardForm extends HTMLFormControlsCollection {
   sentence: HTMLTextAreaElement;
   word: HTMLInputElement;
   answer: HTMLInputElement;
+  pos: HTMLSelectElement;
   translation: HTMLTextAreaElement;
   definition: HTMLTextAreaElement;
   image: HTMLInputElement;
@@ -339,4 +387,34 @@ interface TranslationObject {
 interface WordCardAnswer {
   cardId: number;
   answer: string;
+}
+
+interface ValidationConfig {
+  formSelector: string;
+  inputSelector: string;
+  submitButtonSelector: string;
+  inactiveButtonClass: string;
+  inputErrorClass: string;
+}
+
+interface TeacherRegistrationData {
+  userName: string;
+  password: string;
+  specialCode: string;
+}
+
+interface TeacherLoginData {
+  userName: string;
+  password: string;
+}
+
+interface StudentRegistrationData {
+  userName: string;
+  password: string;
+  specialCode: string;
+}
+
+interface StudentLoginData {
+  userName: string;
+  password: string;
 }

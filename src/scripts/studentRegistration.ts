@@ -1,8 +1,22 @@
 // selectors
 const registerStudentBtn = document.querySelector('#register-btn');
 
+const validationConfigStudentReg: ValidationConfig = {
+  formSelector: '.auth-container__form',
+  inputSelector: '.auth-container__input',
+  submitButtonSelector: '.auth-container__button',
+  inactiveButtonClass: 'auth-container__button_disabled',
+  inputErrorClass: 'auth-container__input_error',
+};
+
+popupCloseButton?.addEventListener('click', (evt) => {
+  closePopup();
+});
+
 registerStudentBtn?.addEventListener('click', async (evt) => {
-  evt.preventDefault();
+  toggleLoader();
+  closePopup();
+  await sleep(1000);
 
   const userName = document.querySelector('#user-name') as HTMLInputElement;
   const password = document.querySelector('#password') as HTMLInputElement;
@@ -14,19 +28,19 @@ registerStudentBtn?.addEventListener('click', async (evt) => {
       password: password.value,
       specialCode: specialCode.value,
     };
-    const payload = JSON.stringify(data);
-
-    const res = await fetch(apiStudentRegisterURL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: payload,
-    });
-    const serverData = await res.json();
-    console.log(serverData);
-    if (res.status === 201) {
-      window.location.href = baseURL;
-    }
-  } else {
-    console.log('error');
+    registerStudent(data)
+      .then(async (res) => {
+        openPopup('success', 'Вы успешно зарегистрировались!');
+        await sleep(2000);
+        window.location.href = baseURL;
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        toggleLoader();
+      });
   }
 });
+
+enableValidation(validationConfigStudentReg);

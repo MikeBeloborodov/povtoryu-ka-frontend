@@ -1,0 +1,32 @@
+@import '../../variables';
+
+.student-dashboard {
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.weak_cards .menu__card-amount {
+  background-color: $accent-color-2-light;
+}
+
+.all_cards {
+  background-color: $accent-color-3;
+}
+
+.all_cards .menu__card-amount {
+  background-color: $accent-color-3-light;
+}
+
+.theme_cards {
+  background-color: $accent-color-4;
+}
+
+.theme_cards .menu__card-amount {
+  background-color: $accent-color-4-dark;
+}
+
+.menu__card-category {
+  color: $paragraph-white-color;
+}

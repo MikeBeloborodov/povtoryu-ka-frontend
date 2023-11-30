@@ -365,6 +365,16 @@ const newSentenceCardModal = (studentId: number) => {
     const labelImage = document.createElement('label');
     const inputDefinition = document.createElement('textarea');
     const labelDefinition = document.createElement('label');
+    const selectPos = document.createElement('select');
+    const selectPosLabel = document.createElement('label');
+    const nounOption = document.createElement('option');
+    const verbOption = document.createElement('option');
+    const adjectiveOption = document.createElement('option');
+    const adverbOption = document.createElement('option');
+    const pronounOption = document.createElement('option');
+    const prepositionOption = document.createElement('option');
+    const conjunctionOption = document.createElement('option');
+    const interjectionOption = document.createElement('option');
     const audioBox = document.createElement('div');
     const startRecordingButton = document.createElement('button');
     const stopRecordingButton = document.createElement('button');
@@ -410,6 +420,36 @@ const newSentenceCardModal = (studentId: number) => {
     labelDefinition.htmlFor = 'definition';
     labelDefinition.textContent = 'Определение:';
 
+    // pos
+    selectPos.name = 'pos';
+    selectPos.id = 'pos';
+    selectPosLabel.htmlFor = 'pos';
+    selectPosLabel.textContent = 'Часть речи:';
+    nounOption.value = 'Существительное';
+    nounOption.textContent = 'Существительное';
+    verbOption.value = 'Глагол';
+    verbOption.textContent = 'Глагол';
+    adjectiveOption.value = 'Прилагательное';
+    adjectiveOption.textContent = 'Прилагательное';
+    adverbOption.value = 'Наречие';
+    adverbOption.textContent = 'Наречие';
+    pronounOption.value = 'Местоимение';
+    pronounOption.textContent = 'Местоимение';
+    prepositionOption.value = 'Предлог';
+    prepositionOption.textContent = 'Предлог';
+    conjunctionOption.value = 'Союз';
+    conjunctionOption.textContent = 'Союз';
+    interjectionOption.value = 'Междометие';
+    interjectionOption.textContent = 'Междометие';
+    selectPos.append(nounOption);
+    selectPos.append(verbOption);
+    selectPos.append(adjectiveOption);
+    selectPos.append(adverbOption);
+    selectPos.append(pronounOption);
+    selectPos.append(prepositionOption);
+    selectPos.append(conjunctionOption);
+    selectPos.append(interjectionOption);
+
     // image
     inputImage.type = 'text';
     inputImage.id = 'image';
@@ -450,6 +490,8 @@ const newSentenceCardModal = (studentId: number) => {
     newCardForm.append(inputSentence);
     newCardForm.append(labelWord);
     newCardForm.append(inputWord);
+    newCardForm.append(selectPosLabel);
+    newCardForm.append(selectPos);
     newCardForm.append(labelAnswer);
     newCardForm.append(inputAnswer);
     newCardForm.append(labelTranslation);
@@ -523,7 +565,7 @@ const sendNewSentenceCard = async (studentId: number) => {
   formData.append('word', elements.word.value);
   formData.append('answer', elements.answer.value);
   formData.append('sentenceTranslation', elements.translation.value);
-  formData.append('pos', 'noun');
+  formData.append('pos', elements.pos.value);
   formData.append('definition', elements.definition.value);
   formData.append('image', elements.image.value);
   formData.append('audio', audioBlob);
@@ -551,12 +593,12 @@ newStudentBtn?.addEventListener('click', () => {
   createNewStudentModal();
 });
 
-// invocations;
+// function calls
 checkToken('teacher', teacherLoginPageURL)
   .then(async () => {
-    toggleLoader('.loader', 'loader_invisible');
+    toggleLoader();
     fillStudentsTable().finally(() => {
-      toggleLoader('.loader', 'loader_invisible');
+      toggleLoader();
       toggleContentVisibility(
         '.teacher-dashboard',
         'teacher-dashboard_invisible'

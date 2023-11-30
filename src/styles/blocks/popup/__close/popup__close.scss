@@ -1,0 +1,12 @@
+.popup__close {
+  inline-size: 20px;
+  block-size: 20px;
+  position: absolute;
+  inset-inline-end: 30px;
+  inset-block-start: 8px;
+  cursor: pointer;
+  border: none;
+  background-image: url('../../../../svg/close.svg');
+  background-size: 20px;
+  background-color: transparent;
+}

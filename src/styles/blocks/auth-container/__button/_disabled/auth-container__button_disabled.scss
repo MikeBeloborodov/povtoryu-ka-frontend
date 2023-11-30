@@ -1,0 +1,8 @@
+@import '../../../../variables.scss';
+
+.auth-container__button_disabled {
+  pointer-events: none;
+  background-color: $disabled-button-background-color !important;
+  color: $disabled-button-text-color;
+  border: solid 1px $disabled-button-border-color;
+}

@@ -2,14 +2,28 @@
 const loginUserBtn = document.querySelector('#login-btn');
 const regUserBtn = document.querySelector('#register-btn');
 
+const validationConfigStudentLogin: ValidationConfig = {
+  formSelector: '.auth-container__form',
+  inputSelector: '.auth-container__input',
+  submitButtonSelector: '#login-btn',
+  inactiveButtonClass: 'auth-container__button_disabled',
+  inputErrorClass: 'auth-container__input_error',
+};
+
 // event listeners
+popupCloseButton?.addEventListener('click', (evt) => {
+  closePopup();
+});
+
 regUserBtn?.addEventListener('click', (evt) => {
   evt.preventDefault();
   window.location.href = studentRegPageURL;
 });
 
 loginUserBtn?.addEventListener('click', async (evt) => {
-  evt.preventDefault();
+  toggleLoader();
+  closePopup();
+  await sleep(1000);
 
   const userNameElement = document.querySelector(
     '#user-name'
@@ -24,29 +38,24 @@ loginUserBtn?.addEventListener('click', async (evt) => {
       password: passwordElement.value,
     };
 
-    const payload = JSON.stringify(data);
-
-    const res = await fetch(apiStudentLoginURL, {
-      method: 'POST',
-      body: payload,
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const serverData = await res.json();
-
-    if (res.status === 200) {
-      console.log(serverData);
-      setCookie('studentToken', serverData.token, 365);
-      window.location.href = studentDashboardURL;
-    } else {
-      console.log(serverData);
-      setCookie('studentToken', '', -1);
-    }
-  } else {
-    console.log('error');
+    loginStudent(data)
+      .then(async (res) => {
+        openPopup('success', 'Вход успешен.');
+        await sleep(2000);
+        setCookie('studentToken', res.token, 365);
+        window.location.href = studentDashboardURL;
+      })
+      .catch((error) => {
+        handleError(error);
+        setCookie('studentToken', '', -1);
+      })
+      .finally(() => {
+        toggleLoader();
+      });
   }
 });
 
-// invocations;
+// function calls
 checkToken('student', '')
   .then(() => {
     window.location.href = studentDashboardURL;
@@ -54,3 +63,5 @@ checkToken('student', '')
   .catch((err) => {
     console.log(err);
   });
+
+enableValidation(validationConfigStudentLogin);

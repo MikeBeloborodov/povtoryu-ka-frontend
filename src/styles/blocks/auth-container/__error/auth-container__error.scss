@@ -1,0 +1,7 @@
+@import '../../../variables.scss';
+
+.auth-container__error {
+  color: $error-color;
+  display: block;
+  padding-top: 5px;
+}

@@ -27,7 +27,7 @@ const setWordCardTriggers = async (
   answerForm?.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (card.dataset.cardId) {
-      toggleLoader('.loader', 'loader_invisible');
+      toggleLoader();
       sendWordCardAnswer({
         cardId: parseInt(card.dataset.cardId),
         answer: answer.value,
@@ -54,7 +54,7 @@ const setWordCardTriggers = async (
           console.log(err);
         })
         .finally(() => {
-          toggleLoader('.loader', 'loader_invisible');
+          toggleLoader();
         });
     }
   });
@@ -97,12 +97,14 @@ const setSentenceCardTriggers = async (
   const errorSpan = answerForm?.querySelector('.card__front-answer-error');
   const elements = answerForm?.elements as answerForm;
   const answer = elements.answer;
+  const audio = document.querySelector('.card__audio') as HTMLAudioElement;
   answer.focus();
 
   answerForm?.addEventListener('submit', (evt) => {
     evt.preventDefault();
+    audio ? audio.play() : null;
     if (card.dataset.cardId) {
-      toggleLoader('.loader', 'loader_invisible');
+      toggleLoader();
       sendSentenceCardAnswer({
         cardId: parseInt(card.dataset.cardId),
         answer: answer.value,
@@ -124,7 +126,7 @@ const setSentenceCardTriggers = async (
           console.log(err);
         })
         .finally(() => {
-          toggleLoader('.loader', 'loader_invisible');
+          toggleLoader();
         });
     }
   });
@@ -165,32 +167,25 @@ const prepareFrontSentenceCard = (
   cardElement: HTMLElement,
   cardData: SentenceCardData
 ) => {
+  //pos
+  const cardPos = cardElement.querySelector('.sentence-card__front-pos');
+  cardPos ? (cardPos.textContent = cardData.pos) : null;
+
   // sentence
   const cardSentence = cardElement.querySelector(
     '.sentence-card__front-sentence'
   );
-  const sentence =
+  let sentence =
     cardData.sentence[0].toUpperCase() + cardData.sentence.slice(1);
-  const regex = /\*.*\*/;
+  const regex = /\*.[^*]*\*/g;
   const searchResult = sentence.match(regex);
-  let searchString;
-  let index;
-  let formatedSentence;
-  if (searchResult) {
-    searchString = searchResult[0];
-    index = searchResult.index;
-    if (index) {
-      formatedSentence =
-        sentence.slice(0, index) +
-        '<span class="card__front-bold-text">' +
-        searchString.replace(/\*/g, '') +
-        '</span>' +
-        sentence.slice(index + searchString.length);
-      cardSentence ? (cardSentence.innerHTML = formatedSentence) : null;
-    }
-  } else {
-    cardSentence ? (cardSentence.textContent = sentence) : null;
-  }
+  searchResult?.forEach((item) => {
+    sentence = sentence.replace(
+      item,
+      `<span class="card__front-bold-text">${item.replace(/\*/g, '')}</span>`
+    );
+  });
+  cardSentence ? (cardSentence.innerHTML = sentence) : null;
 
   // word
   const cardWord = cardElement.querySelector('.sentence-card__front-word');
@@ -203,9 +198,17 @@ const prepareBackSentenceCard = async (
 ) => {
   // sentence
   const cardSentence = cardElement.querySelector('.card__back-sentence-text');
-  const sentence =
+  let sentence =
     cardData.sentence[0].toUpperCase() + cardData.sentence.slice(1);
-  cardSentence ? (cardSentence.textContent = sentence) : null;
+  const regex = /\*.[^*]*\*/g;
+  const searchResult = sentence.match(regex);
+  searchResult?.forEach((item) => {
+    sentence = sentence.replace(
+      item,
+      `<span class="card__back-bold-text">${item.replace(/\*/g, '')}</span>`
+    );
+  });
+  cardSentence ? (cardSentence.innerHTML = sentence) : null;
 
   // translation
   const cardTranslation = cardElement.querySelector(
@@ -235,6 +238,12 @@ const prepareBackSentenceCard = async (
     '.card__back-image'
   ) as HTMLImageElement;
   cardImage ? (cardImage.src = cardData.image) : null;
+  cardImage.addEventListener('click', () => {
+    const modal = createImageModal({ id: 1, url: cardData.image });
+    modal.addEventListener('click', () => modal.remove());
+    document.body.append(modal);
+    scroll(0, 0);
+  });
 
   // audio
   const cardAudio = cardElement.querySelector(
@@ -242,7 +251,6 @@ const prepareBackSentenceCard = async (
   ) as HTMLAudioElement;
   const audioBlob = await getCardAudio(cardData.audio);
   cardAudio ? (cardAudio.src = URL.createObjectURL(audioBlob)) : null;
-  cardAudio.play();
 };
 
 const prepareWord = (cardElement: HTMLElement, cardData: WordCardData) => {

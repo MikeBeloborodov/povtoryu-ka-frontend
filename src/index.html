@@ -11,53 +11,75 @@
     <link rel="apple-touch-icon" href="./favicons/mobile-icon.png" />
   </head>
   <body class="body">
-    <main class="login__main">
-      <section class="login">
-        <h1 class="login__title">Вход пользователя</h1>
-        <form class="login__form">
-          <div class="login__user-name-container">
-            <label class="login__user-name-label login-label" for="user-name"
+    <div class="loader loader_invisible"></div>
+    <main class="auth-container__main">
+      <section class="auth-container">
+        <h1 class="auth-container__title">Вход пользователя</h1>
+        <form class="auth-container__form">
+          <div class="auth-container__input-container">
+            <label class="auth-container__label" for="user-name"
               >Имя или email</label
             >
             <input
-              class="login__user-name"
+              class="auth-container__input"
               type="text"
               name="user-name"
               id="user-name"
               placeholder="example@email.com"
+              required
+              minlength="8"
+              maxlength="40"
+              pattern="[\da-zA-z@\.]+$"
+              data-error-message="Разрешены только латинские буквы, цифры, знак @ и точка"
             />
+            <span class="auth-container__error" id="user-name-error"></span>
           </div>
-          <div class="login__password-container">
-            <label class="login__password-label login-label" for="password"
-              >Пароль</label
-            >
+          <div class="auth-container__input-container">
+            <label class="auth-container__label" for="password">Пароль</label>
             <input
-              class="login__user-password"
+              class="auth-container__input"
               type="password"
               name="password"
               id="password"
               placeholder="********"
+              required
+              minlength="8"
+              maxlength="40"
+              pattern="[\da-zA-z@\.!#\$%\^&\*]+$"
+              data-error-message="Разрешены только латинские буквы, цифры и спец. символы"
             />
+            <span class="auth-container__error" id="password-error"></span>
           </div>
-          <div class="login__btns">
+          <div class="auth-container__buttons-container">
             <button
-              class="login-btn login-form-btn"
+              class="auth-container__button auth-container__button_accent-color-1"
               type="submit"
               id="login-btn"
             >
               Вход
             </button>
-            <button class="register-btn login-form-btn" id="register-btn">
+            <button
+              class="auth-container__button auth-container__button_accent-color-2"
+              id="register-btn"
+            >
               Регистрация
             </button>
           </div>
         </form>
       </section>
     </main>
+    <div class="popup">
+      <button class="popup__close"></button>
+      <div class="popup__content">
+        <p class="popup__message"></p>
+      </div>
+    </div>
     <!-- 
       <footer class="footer">&copy; 2023 MikeBeloborodov</footer>
     -->
-    <script src="./scripts/utils.js"></script>
+    <script src="../scripts/utils.js" defer></script>
+    <script src="../scripts/validation.js" defer></script>
+    <script src="../scripts/api.js" defer></script>
     <script src="./scripts/studentLogin.js" defer></script>
   </body>
 </html>

@@ -1,0 +1,9 @@
+@import '../../../variables.scss';
+
+.popup__content {
+  background-color: $white-color;
+  padding: 20px;
+  min-block-size: 68px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}

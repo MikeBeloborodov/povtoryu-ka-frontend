@@ -1,0 +1,12 @@
+@import '../../../variables.scss';
+
+.student-dashboard__menu {
+  margin: 0;
+  background-color: $general-background-color;
+  padding: 40px 30px;
+  border-radius: $general-border-radius;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  box-shadow: $general-box-shadow;
+}

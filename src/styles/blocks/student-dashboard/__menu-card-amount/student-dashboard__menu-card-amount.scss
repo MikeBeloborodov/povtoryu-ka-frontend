@@ -1,0 +1,9 @@
+@import '../../../variables.scss';
+
+.student-dashboard__menu-card-amount {
+  color: $paragraph-white-color;
+  inline-size: fit-content;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: $accent-color-1;
+}

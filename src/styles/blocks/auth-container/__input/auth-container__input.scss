@@ -1,0 +1,10 @@
+.auth-container__input {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid black;
+  inline-size: 100%;
+}
+
+.auth-container__input:focus-visible {
+  outline: none;
+}

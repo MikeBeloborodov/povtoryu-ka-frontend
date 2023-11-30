@@ -1,0 +1,20 @@
+@import '../../variables.scss';
+
+.popup {
+  position: absolute;
+  min-block-size: 100px;
+  inline-size: 300px;
+  border-top-left-radius: $general-border-radius;
+  border-top-right-radius: $general-border-radius;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding-top: 35px;
+  box-shadow: $general-box-shadow;
+  inset-inline-end: 20px;
+  inset-block-start: 20px;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    visibility 0.3s ease,
+    opacity 0.3s ease;
+}

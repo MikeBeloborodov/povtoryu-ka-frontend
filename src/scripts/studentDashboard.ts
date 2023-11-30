@@ -45,11 +45,11 @@ const loadCardsAmount = (cardsCountData: CardsCountData) => {
   }
 };
 
-// invocations;
-toggleLoader('.loader', 'loader_invisible');
+// function calls
+toggleLoader();
 checkToken('student', studentLoginPageURL)
   .then(() => {
-    toggleLoader('.loader', 'loader_invisible');
+    toggleLoader();
     getCardsCount()
       .then((cardsCountData: CardsCountData) => {
         loadCardsAmount(cardsCountData);
@@ -58,16 +58,16 @@ checkToken('student', studentLoginPageURL)
         console.log(err);
       })
       .finally(() => {
-        toggleLoader('.loader', 'loader_invisible');
+        toggleLoader();
       });
   })
   .catch((err) => {
     console.log(err);
   })
   .finally(() => {
-    toggleLoader('.loader', 'loader_invisible');
+    toggleLoader();
     toggleContentVisibility(
-      '.student-dashboard',
-      'student-dashboard_invisible'
+      '.student-dashboard__main',
+      'student-dashboard__main_invisible'
     );
   });
